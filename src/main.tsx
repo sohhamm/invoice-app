@@ -4,13 +4,16 @@ import './index.css'
 import App from './App'
 import {BrowserRouter} from 'react-router-dom'
 import {NextUIProvider} from '@nextui-org/react'
+import Layout from './components/layout/Layout'
 
 function Root() {
   return (
     <React.StrictMode>
       <BrowserRouter>
         <NextUIProvider>
-          <App />
+          <Layout>
+            <App />
+          </Layout>
         </NextUIProvider>
       </BrowserRouter>
     </React.StrictMode>
