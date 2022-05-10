@@ -1,5 +1,5 @@
-import InvoiceDetails from './pages/invoice-details'
-import Invoices from './pages/invoices'
+import Invoices from '@/pages/invoices'
+import InvoiceDetails from '@/pages/invoice-details'
 import {Route, Routes} from 'react-router-dom'
 
 export default function App() {
