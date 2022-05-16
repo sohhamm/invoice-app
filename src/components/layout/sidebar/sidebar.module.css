@@ -4,4 +4,30 @@
   background-color: #373b53;
   width: 103px;
   height: 100%;
+  border-radius: 0px 20px 20px 0px;
+}
+
+.topBox {
+  width: 103px;
+  height: 103px;
+  background-color: #7c5dfa;
+  border-radius: 0px 20px 20px 0px;
+  left: 0;
+  position: absolute;
+}
+
+.topBoxBottom {
+  width: 103px;
+  height: 51.5px;
+  background-color: #9277ff;
+  border-radius: 20px 0px 20px 0px;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+}
+
+.logo {
+  position: absolute;
+  top: 21%;
+  left: 30%;
 }
