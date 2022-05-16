@@ -1,0 +1,7 @@
+.box {
+  position: fixed;
+  left: 0;
+  background-color: #373b53;
+  width: 103px;
+  height: 100%;
+}
