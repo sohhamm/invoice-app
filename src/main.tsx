@@ -1,22 +1,20 @@
-import * as React from 'react'
-import {createRoot} from 'react-dom/client'
 import './index.css'
-import '@fontsource/spartan'
+import '@fontsource/spartan/400.css'
+import '@fontsource/spartan/500.css'
+import '@fontsource/spartan/700.css'
+import * as React from 'react'
 import App from './App'
 import Layout from '@/components/layout/Layout'
+import {createRoot} from 'react-dom/client'
 import {BrowserRouter} from 'react-router-dom'
-import {NextUIProvider} from '@nextui-org/react'
-import {theme} from '@/styles/nextui-theme'
 
 function Root() {
   return (
     <React.StrictMode>
       <BrowserRouter>
-        <NextUIProvider theme={theme}>
-          <Layout>
-            <App />
-          </Layout>
-        </NextUIProvider>
+        <Layout>
+          <App />
+        </Layout>
       </BrowserRouter>
     </React.StrictMode>
   )
