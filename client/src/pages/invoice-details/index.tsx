@@ -8,11 +8,14 @@ import {Link, useParams} from 'react-router-dom'
 import d from '../../../data.json'
 import Button from '@/components/ui/button'
 import {INVOICES} from '@/utils'
+import DeleteConfirm from '@/components/delete-confirm/DeleteConfirm'
 
 export default function InvoiceDetails() {
   const {id} = useParams()
 
   const invoice: any = d.find(i => i.id === id)
+
+  const onDelete = () => {}
 
   return (
     <div className={classes.box}>
@@ -32,7 +35,7 @@ export default function InvoiceDetails() {
 
         <div className={classes.cta}>
           <Button variant='edit'>Edit</Button>
-          <Button variant='delete'>Delete</Button>
+          <DeleteConfirm onDelete={onDelete} invoiceId={invoice.id} />
           <Button hasAddIcon={false}>Mark as Paid</Button>
         </div>
       </div>
