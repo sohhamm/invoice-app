@@ -1,4 +1,5 @@
 import classes from './invoices.module.css'
+import Button from '../../components/ui/button'
 
 export default function Invoices() {
   const invoiceCount = 7
@@ -10,7 +11,7 @@ export default function Invoices() {
           <p>There are {invoiceCount}total invoices</p>
         </div>
 
-        <div>button</div>
+        <Button hasAddIcon>New Invoice</Button>
       </div>
     </div>
   )

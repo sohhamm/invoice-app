@@ -1,3 +1,23 @@
+:root {
+  --bg: hsl(0, 0%, 100%);
+  --btn-edit-bg: #f9fafe;
+  --btn-edit-color: #7e88c3;
+  --btn-edit-bg-hover: #dfe3fa;
+
+  --btn-draft-bg: #373b53;
+  --btn-draft-color: #888eb0;
+  --btn-draft-bg-hover: #0c0e16;
+}
+
+[data-theme='dark'] {
+  --bg: #231f20;
+  --btn-edit-bg: #252945;
+  --btn-edit-color: #dfe3fa;
+  --btn-edit-bg-hover: hsl(0, 0%, 100%);
+
+  --btn-draft-color: #dfe3fa;
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */

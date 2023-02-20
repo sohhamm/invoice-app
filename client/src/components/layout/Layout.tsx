@@ -7,9 +7,9 @@ interface LayoutProps {
 
 export default function Layout({children}: LayoutProps) {
   return (
-    <>
+    <div className={classes.container}>
       <Sidebar />
       <div className={classes.box}>{children}</div>
-    </>
+    </div>
   )
 }
