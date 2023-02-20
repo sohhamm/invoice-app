@@ -17,6 +17,6 @@ server.listen(
       process.exit(1)
     }
 
-    console.log(`Server listening at http://localhost:${address} 🚀`)
+    console.log(`Server listening at ${address} 🚀`)
   },
 )
