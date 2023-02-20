@@ -11,6 +11,16 @@
   line-height: 36px;
   letter-spacing: -1px;
   color: #0c0e16;
+  margin-bottom: 8px;
+}
+
+.header > div > p {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+
+  color: #888eb0;
 }
 
 .ctaBox {

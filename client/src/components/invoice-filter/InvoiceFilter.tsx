@@ -2,14 +2,14 @@ import * as React from 'react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import classes from './invoice-filter.module.css'
 import {HiChevronDown, HiChevronUp, HiCheck} from 'react-icons/hi2'
+import {Option} from '@/types'
 
-export default function InvoiceFilter() {
-  const [opts, setOpts] = React.useState({
-    draft: false,
-    pending: false,
-    paid: false,
-  })
+interface InvoiceFilterProps {
+  opts: Option
+  setOpts: React.Dispatch<React.SetStateAction<Option>>
+}
 
+export default function InvoiceFilter({opts, setOpts}: InvoiceFilterProps) {
   const handleChange = (opt: 'draft' | 'pending' | 'paid') => {
     switch (opt) {
       case 'draft':
