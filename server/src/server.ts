@@ -8,8 +8,8 @@ server.get('/health', async () => {
 
 server.listen(
   {
-    port: 8080,
-    //  host: '0.0.0.0'
+    port: 8000,
+    host: '0.0.0.0',
   },
   (err, address) => {
     if (err) {
