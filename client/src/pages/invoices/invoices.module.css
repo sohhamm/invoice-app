@@ -12,3 +12,8 @@
   letter-spacing: -1px;
   color: #0c0e16;
 }
+
+.ctaBox {
+  display: flex;
+  align-items: center;
+}

@@ -1,5 +1,6 @@
 import classes from './invoices.module.css'
 import Button from '../../components/ui/button'
+import InvoiceFilter from '@/components/invoice-filter/InvoiceFilter'
 
 export default function Invoices() {
   const invoiceCount = 7
@@ -11,7 +12,10 @@ export default function Invoices() {
           <p>There are {invoiceCount}total invoices</p>
         </div>
 
-        <Button hasAddIcon>New Invoice</Button>
+        <div className={classes.ctaBox}>
+          <InvoiceFilter />
+          <Button hasAddIcon>New Invoice</Button>
+        </div>
       </div>
     </div>
   )

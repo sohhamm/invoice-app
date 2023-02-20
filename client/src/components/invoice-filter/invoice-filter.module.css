@@ -1,0 +1,113 @@
+.btn {
+  margin-right: 40px;
+  display: flex;
+  align-items: center;
+  column-gap: 14px;
+
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+
+  color: #0c0e16;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+/* radix styles */
+
+@import '@radix-ui/colors/blackA.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/violet.css';
+
+/* reset */
+button {
+  all: unset;
+}
+
+.DropdownMenuContent {
+  width: 192px;
+  height: 128px;
+  background: #ffffff;
+  box-shadow: 0px 10px 20px rgba(72, 84, 159, 0.25);
+  border-radius: 8px;
+  padding: 24px;
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+
+  margin-top: 23px;
+}
+
+.DropdownMenuContent[data-side='bottom'] {
+  animation-name: slideUpAndFade;
+}
+
+.DropdownMenuCheckboxItem {
+  display: flex;
+  align-items: center;
+  height: 16px;
+  padding: 0 5px;
+  position: relative;
+  padding-left: 25px;
+  user-select: none;
+  outline: none;
+
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+  color: #1e2139;
+
+  margin-bottom: 16px;
+}
+
+/* .DropdownMenuCheckboxItem[data-highlighted]  */
+
+.DropdownMenuSeparator {
+  height: 1px;
+  background-color: var(--violet6);
+  margin: 5px;
+}
+
+.DropdownMenuItemIndicator {
+  position: absolute;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #7c5dfa;
+  border-radius: 2px;
+  margin-right: 13px;
+
+  fill: white;
+}
+
+/* todo figure this out */
+/* https://www.radix-ui.com/docs/primitives/components/dropdown-menu#itemindicator */
+
+/* .DropdownMenuItemIndicator[data-state='checked'] {
+  background-color: #7c5dfa;
+}
+
+.DropdownMenuItemIndicator[data-state='unchecked'] {
+  border: 1px solid #7c5dfa;
+
+  background-color: #dfe3fa;
+} */
+
+@keyframes slideUpAndFade {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

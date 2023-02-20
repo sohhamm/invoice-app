@@ -1,6 +1,6 @@
 import * as React from 'react'
 import clsx from 'clsx'
-import classes from './styles.module.css'
+import classes from './button.module.css'
 import {HiPlusCircle} from 'react-icons/hi2'
 
 type Variant = 'default' | 'edit' | 'draft' | 'delete' | 'large'
