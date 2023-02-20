@@ -1,11 +1,14 @@
 import * as React from 'react'
 import Button from '@/components/ui/button'
+import Invoice from '@/components/invoice'
 import InvoiceFilter from '@/components/invoice-filter'
+import empty from '@/assets/empty-invoice.svg'
 import classes from './invoices.module.css'
 import type {IInvoice, Option} from '@/types'
 
-import invoices from '../../../data.json'
-import Invoice from '@/components/invoice/Invoice'
+// import invoices from '../../../data.json'
+
+const invoices: any = []
 
 export default function Invoices() {
   const [opts, setOpts] = React.useState<Option>({
@@ -13,6 +16,8 @@ export default function Invoices() {
     pending: false,
     paid: false,
   })
+
+  const fetchingInvoices = false
 
   return (
     <div>
@@ -29,9 +34,19 @@ export default function Invoices() {
       </div>
 
       <div className={classes.body}>
-        {invoices.map((invoice: IInvoice) => (
-          <Invoice key={invoice.id} invoice={invoice} />
-        ))}
+        {!fetchingInvoices && !invoices.length ? (
+          <div className={classes.emptyBox}>
+            <img src={empty} alt='Empty' />
+
+            <h2>There is nothing here</h2>
+            <p>
+              Create an invoice by clicking the <br /> <span>New Invoice </span>
+              button and get started
+            </p>
+          </div>
+        ) : (
+          invoices.map((invoice: IInvoice) => <Invoice key={invoice.id} invoice={invoice} />)
+        )}
       </div>
     </div>
   )

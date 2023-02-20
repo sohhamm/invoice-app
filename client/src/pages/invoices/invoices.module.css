@@ -36,3 +36,36 @@
 
   row-gap: 16px;
 }
+
+.emptyBox {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 280px);
+  justify-content: center;
+  align-items: center;
+  max-width: 242px;
+  margin: auto;
+  text-align: center;
+}
+
+.emptyBox > h2 {
+  margin-top: 64px;
+  margin-bottom: 24px;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  letter-spacing: -0.625px;
+  color: #0c0e16;
+}
+
+.emptyBox > p {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+  color: #888eb0;
+}
+
+.emptyBox > p > span {
+  font-weight: 700;
+}
