@@ -7,6 +7,9 @@
   --btn-draft-bg: #373b53;
   --btn-draft-color: #888eb0;
   --btn-draft-bg-hover: #0c0e16;
+
+  /* invoice card variables */
+  --inv-bg: white;
 }
 
 [data-theme='dark'] {
@@ -16,6 +19,8 @@
   --btn-edit-bg-hover: hsl(0, 0%, 100%);
 
   --btn-draft-color: #dfe3fa;
+
+  --inv-bg: #1e2139;
 }
 
 /*
