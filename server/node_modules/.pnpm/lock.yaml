@@ -2,7 +2,9 @@ lockfileVersion: 5.4
 
 specifiers:
   '@prisma/client': ^4.10.1
+  '@types/bcryptjs': ^2.4.2
   '@types/node': ^18.14.0
+  bcryptjs: ^2.4.3
   fastify: ^4.13.0
   fastify-jwt: ^4.2.0
   fastify-swagger: ^5.2.0
@@ -16,6 +18,7 @@ specifiers:
 
 dependencies:
   '@prisma/client': 4.10.1_prisma@4.10.1
+  bcryptjs: 2.4.3
   fastify: 4.13.0
   fastify-jwt: 4.2.0
   fastify-swagger: 5.2.0
@@ -25,6 +28,7 @@ dependencies:
   zod-to-json-schema: 3.20.4_zod@3.20.6
 
 devDependencies:
+  '@types/bcryptjs': 2.4.2
   '@types/node': 18.14.0
   nodemon: 2.0.20
   ts-node: 10.9.1_tncu2ai53lzgmizdedur7lbibe
@@ -263,6 +267,10 @@ packages:
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
     dev: true
 
+  /@types/bcryptjs/2.4.2:
+    resolution: {integrity: sha512-LiMQ6EOPob/4yUL66SZzu6Yh77cbzJFYll+ZfaPiPPFswtIlA/Fs1MzdKYA7JApHU49zQTbJGX3PDmCpIdDBRQ==}
+    dev: true
+
   /@types/js-yaml/4.0.5:
     resolution: {integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==}
     dev: false
@@ -391,6 +399,10 @@ packages:
 
   /base64-js/1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+    dev: false
+
+  /bcryptjs/2.4.3:
+    resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
     dev: false
 
   /binary-extensions/2.2.0:

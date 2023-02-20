@@ -1,22 +1,19 @@
 import fastify from 'fastify'
+import userRoutes from './modules/user/user.route'
+import {userSchemas} from './modules/user/user.schema'
 
-const server = fastify()
+export function buildServer() {
+  const server = fastify()
 
-server.get('/health', async () => {
-  return {data: 'Server is running'}
-})
+  server.get('/health', async function () {
+    return {status: 'OK'}
+  })
 
-server.listen(
-  {
-    port: 8000,
-    host: '0.0.0.0',
-  },
-  (err, address) => {
-    if (err) {
-      console.error(err)
-      process.exit(1)
-    }
+  for (const schema of [...userSchemas]) {
+    server.addSchema(schema)
+  }
 
-    console.log(`Server listening at ${address} 🚀`)
-  },
-)
+  server.register(userRoutes, {prefix: 'api/users'})
+
+  return server
+}
