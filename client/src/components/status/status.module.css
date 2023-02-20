@@ -1,0 +1,30 @@
+.tag {
+  width: 104px;
+  height: 40px;
+  mix-blend-mode: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+  text-transform: capitalize;
+}
+
+.tagDraft {
+  background: #f4f4f5;
+  color: #383b51;
+}
+
+.tagPending {
+  background: #fef9f1;
+  color: #f09536;
+}
+
+.tagPaid {
+  background: #f5fdfa;
+  color: #6bd3a3;
+}

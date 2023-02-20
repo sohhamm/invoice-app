@@ -1,0 +1,45 @@
+.box {
+  padding-top: 64px;
+  width: 100%;
+}
+
+.back {
+  margin-bottom: 34px;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+  color: #7e88c3;
+  display: flex;
+  align-items: center;
+  column-gap: 24px;
+}
+
+.header {
+  margin-bottom: 24px;
+  height: 88px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+  color: #858bb2;
+  column-gap: 16px;
+}
+
+.cta {
+  display: flex;
+  column-gap: 8px;
+}
+
+.details {
+  padding: 48px;
+}

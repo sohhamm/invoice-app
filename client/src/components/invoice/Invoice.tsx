@@ -7,6 +7,7 @@ import {RxDotFilled} from 'react-icons/rx'
 import {Link} from 'react-router-dom'
 import {currencyFormatter, GET_INVOICE_DETAILS} from '@/utils'
 import type {IInvoice} from '@/types'
+import Status from '../status/Status'
 
 interface InvoiceProps {
   invoice: IInvoice
@@ -15,7 +16,7 @@ interface InvoiceProps {
 export default function Invoice({invoice}: InvoiceProps) {
   return (
     <Link to={GET_INVOICE_DETAILS(invoice.id)}>
-      <div className={classes.box}>
+      <div className={clsx(classes.box, 'card')}>
         <div className={classes.leftBox}>
           <div className={classes.id}>
             <span>#</span>
@@ -33,17 +34,7 @@ export default function Invoice({invoice}: InvoiceProps) {
           <div className={classes.price}>{currencyFormatter({amount: invoice.total})}</div>
 
           <div className={classes.flexer}>
-            <div
-              className={clsx(
-                classes.tag,
-                invoice.status === 'draft' && classes.tagDraft,
-                invoice.status === 'pending' && classes.tagPending,
-                invoice.status === 'paid' && classes.tagPaid,
-              )}
-            >
-              <RxDotFilled size={24} />
-              <span>{invoice.status}</span>
-            </div>
+            <Status invoice={invoice} />
 
             <HiChevronRight color='#7C5DFA' size={12} strokeWidth={3} />
           </div>

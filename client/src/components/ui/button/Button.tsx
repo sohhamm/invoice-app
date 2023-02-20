@@ -11,11 +11,7 @@ interface ButtonProps {
   variant?: Variant
 }
 
-export default function ButtonDefault({
-  children,
-  hasAddIcon = false,
-  variant = 'default',
-}: ButtonProps) {
+export default function Button({children, hasAddIcon = false, variant = 'default'}: ButtonProps) {
   return (
     <button
       className={clsx(

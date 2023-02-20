@@ -105,3 +105,9 @@ h6 {
 #__next {
   isolation: isolate;
 }
+
+.card {
+  box-shadow: 0px 10px 10px -10px rgba(72, 84, 159, 0.100397);
+  border-radius: 8px;
+  background-color: var(--inv-bg);
+}
