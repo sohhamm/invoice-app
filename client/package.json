@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fontsource/spartan": "^4.5.8",
+    "@hookform/resolvers": "^2.9.11",
     "@radix-ui/react-alert-dialog": "^1.0.2",
     "@radix-ui/react-dialog": "^1.0.2",
     "@radix-ui/react-dropdown-menu": "^2.0.2",
@@ -21,8 +22,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^3.1.4",
+    "react-hook-form": "^7.43.1",
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.8.1",
+    "yup": "^1.0.0",
     "zustand": "^4.3.3"
   },
   "devDependencies": {

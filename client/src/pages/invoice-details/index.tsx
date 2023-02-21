@@ -9,6 +9,7 @@ import {Link, useParams} from 'react-router-dom'
 import {HiChevronLeft} from 'react-icons/hi2'
 import {INVOICES, currencyFormatter} from '@/utils'
 import d from '../../../data.json'
+import InvoiceDrawer from '@/components/invoice-drawer/InvoiceDrawer'
 
 export default function InvoiceDetails() {
   const {id} = useParams()
@@ -38,9 +39,7 @@ export default function InvoiceDetails() {
         </div>
 
         <div className={classes.cta}>
-          <Button variant='edit' onClick={handleEdit}>
-            Edit
-          </Button>
+          <InvoiceDrawer invoice={invoice} handleEditInvoice={handleEdit} isEdit={true} />
           <DeleteConfirm onDelete={onDelete} invoiceId={invoice.id} />
           <Button hasAddIcon={false} onClick={handlePaid}>
             Mark as Paid
