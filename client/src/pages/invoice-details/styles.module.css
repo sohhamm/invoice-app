@@ -43,3 +43,147 @@
 .details {
   padding: 48px;
 }
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.topLeft > h4 {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.8px;
+  color: #0c0e16;
+  margin-bottom: 8px;
+}
+
+.topLeft > h4 > span {
+  color: #888eb0;
+}
+
+.topLeft > p {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+  color: #7e88c3;
+}
+
+.topRight,
+.clientAddress {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 18px;
+  text-align: right;
+  letter-spacing: -0.229167px;
+  color: #7e88c3;
+}
+
+.clientAddress {
+  text-align: left;
+  margin-top: 8px;
+}
+
+.middle {
+  display: flex;
+  column-gap: 100px;
+  margin-bottom: 45px;
+}
+
+.middleLeftTop {
+  margin-bottom: 32px;
+}
+
+.middleLeftTopTitle,
+.middleLeftBottomTitle,
+.middleCenterLabel,
+.middleRightLabel {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+  color: #7e88c3;
+  margin-bottom: 12px;
+}
+
+.middleLeftTopDate,
+.middleLeftBottomDate,
+.clientName,
+.clientEmail {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.3125px;
+  color: #0c0e16;
+}
+
+.middleCenter {
+  margin-right: 10px;
+}
+
+.priceSummary {
+  background: #373b53;
+  border-radius: 0px 0px 8px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+}
+
+.priceSummary > p {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 18px;
+  letter-spacing: -0.229167px;
+  color: #ffffff;
+}
+
+.priceSummary > h1 {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 32px;
+  text-align: right;
+  letter-spacing: -0.5px;
+  color: #ffffff;
+}
+
+.items {
+  width: 100%;
+
+  background: #f9fafe;
+  border-radius: 8px 8px 0px 0px;
+  padding: 32px;
+  padding-bottom: 40px;
+}
+
+.itemLabel,
+.itemBody {
+  text-align: end;
+}
+
+.headerRow:first-child {
+  text-align: start !important;
+}
+
+th,
+td {
+  padding-bottom: 32px;
+}
+
+.itemLabel {
+  font-weight: 500;
+  font-size: 11px;
+  line-height: 18px;
+  letter-spacing: -0.229167px;
+  color: #7e88c3;
+}
+
+.itemBody {
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: -0.25px;
+  color: #0c0e16;
+}

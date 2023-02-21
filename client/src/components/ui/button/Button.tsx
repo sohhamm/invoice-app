@@ -9,9 +9,15 @@ interface ButtonProps {
   children: React.ReactNode
   hasAddIcon?: boolean
   variant?: Variant
+  onClick?: any
 }
 
-export default function Button({children, hasAddIcon = false, variant = 'default'}: ButtonProps) {
+export default function Button({
+  children,
+  onClick,
+  hasAddIcon = false,
+  variant = 'default',
+}: ButtonProps) {
   return (
     <button
       className={clsx(
@@ -22,6 +28,7 @@ export default function Button({children, hasAddIcon = false, variant = 'default
         isDel(variant) && classes.btnDel,
         isLg(variant) && classes.btnLg,
       )}
+      onClick={onClick}
     >
       {hasAddIcon && <HiPlusCircle size={32} />}
       {children}
