@@ -10,6 +10,7 @@ interface ButtonProps {
   hasAddIcon?: boolean
   variant?: Variant
   onClick?: any
+  type?: 'button' | 'submit' | 'reset'
 }
 
 export default function Button({
@@ -17,6 +18,7 @@ export default function Button({
   onClick,
   hasAddIcon = false,
   variant = 'default',
+  type = 'button',
 }: ButtonProps) {
   return (
     <button
@@ -29,6 +31,7 @@ export default function Button({
         isLg(variant) && classes.btnLg,
       )}
       onClick={onClick}
+      type={type}
     >
       {hasAddIcon && <HiPlusCircle size={32} />}
       {children}

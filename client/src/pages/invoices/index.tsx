@@ -7,6 +7,7 @@ import classes from './styles.module.css'
 import type {IInvoice, Option} from '@/types'
 
 import invoices from '../../../data.json'
+import InvoiceDrawer from '@/components/invoice-drawer/InvoiceDrawer'
 
 // const invoices: any = []
 
@@ -29,7 +30,8 @@ export default function Invoices() {
 
         <div className={classes.ctaBox}>
           <InvoiceFilter opts={opts} setOpts={setOpts} />
-          <Button hasAddIcon>New Invoice</Button>
+
+          <InvoiceDrawer />
         </div>
       </div>
 

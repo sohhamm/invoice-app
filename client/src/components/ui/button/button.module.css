@@ -59,7 +59,8 @@
 }
 
 .btnLg {
-  width: 350px;
+  min-width: 350px;
+  width: 100%;
 
   background-color: #f9fafe;
   color: #7e88c3;

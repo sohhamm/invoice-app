@@ -156,3 +156,28 @@
   letter-spacing: -0.375px;
   color: #777f98;
 }
+
+.itemLabels {
+  display: grid;
+  grid-template-columns: 214px 46px 100px 45px 12.44px;
+  column-gap: 16px;
+}
+
+.itemFields {
+  display: flex;
+  flex-direction: column;
+  row-gap: 18px;
+
+  margin-bottom: 18px;
+}
+
+.itemBox {
+  display: grid;
+  grid-template-columns: 214px 46px 100px 45px 12.44px;
+  column-gap: 16px;
+  align-items: center;
+}
+
+.delIcon:hover {
+  cursor: pointer;
+}

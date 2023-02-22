@@ -6,6 +6,7 @@ import Button from '@/components/ui/button'
 import classes from './invoice-drawer.module.css'
 import {yupResolver} from '@hookform/resolvers/yup'
 import {useForm} from 'react-hook-form'
+import {MdDelete} from 'react-icons/md'
 
 const schema = yup
   .object({
@@ -21,19 +22,31 @@ const schema = yup
     clientPostCode: yup.string().required(),
     clientCountry: yup.string().required(),
 
-    createdAt: yup.string().required(),
+    createdAt: yup.date().required(),
     paymentDue: yup.string().required(),
 
     paymentTerms: yup.number().required(),
 
     description: yup.string().required(),
+
+    items: yup
+      .array()
+      .of(
+        yup.object().shape({
+          name: yup.string(),
+          quantity: yup.string(),
+          price: yup.string(),
+          total: yup.string(),
+        }),
+      )
+      .required(),
   })
   .required()
 
 type FormData = yup.InferType<typeof schema>
 
 interface InvoiceDrawerProps {
-  invoice: any
+  invoice?: any
   handleEditInvoice?: any
   isEdit?: boolean
 }
@@ -43,25 +56,72 @@ export default function InvoiceDrawer({
   handleEditInvoice,
   isEdit = false,
 }: InvoiceDrawerProps) {
+  const [open, setOpen] = React.useState(false)
+
+  const defaultValues: FormData = {
+    street: invoice?.senderAddress.street || '',
+    city: invoice?.senderAddress.city || '',
+    postCode: invoice?.senderAddress.postCode || '',
+    country: invoice?.senderAddress.country || '',
+    clientName: invoice?.clientName || '',
+    clientEmail: invoice?.clientEmail || '',
+    clientStreet: invoice?.clientAddress.street || '',
+    clientCity: invoice?.clientAddress.city || '',
+    clientPostCode: invoice?.clientAddress.postCode || '',
+    clientCountry: invoice?.clientAddress.country || '',
+    createdAt: invoice?.createdAt ? new Date(invoice?.createdAt) : new Date(),
+    paymentDue: invoice?.paymentDue ? new Date(invoice?.paymentDue).toString() : '',
+    paymentTerms: invoice?.paymentTerms || '',
+    description: invoice?.description || '',
+    items: invoice?.items || [],
+  }
+
   const {
     register,
     handleSubmit,
     watch,
     formState: {errors},
-  } = useForm<FormData>({resolver: yupResolver(schema)})
+    getValues,
+    setValue,
+  } = useForm<FormData>({resolver: yupResolver(schema), defaultValues})
+
+  console.log(getValues)
 
   const onSubmit = (data: FormData) => {
     console.log(data)
 
     const payload = data
     handleEditInvoice(payload)
+    setOpen(false)
+  }
+
+  const handleDeleteItem = (idx: number) => {
+    const items = [...getValues('items')]
+
+    const newItems = items.splice(idx, 1)
+
+    setValue('items', newItems)
+  }
+
+  const handleAddNewItem = () => {
+    const items = [
+      ...getValues('items'),
+      {
+        name: '',
+        quantity: '',
+        price: '',
+        total: '',
+      },
+    ]
+
+    setValue('items', items)
   }
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
         <div>
-          <Button variant='edit'>Edit</Button>
+          {isEdit ? <Button variant='edit'>Edit</Button> : <Button hasAddIcon>New Invoice</Button>}
         </div>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -87,7 +147,7 @@ export default function InvoiceDrawer({
             <input className={classes.Input} id='street' {...register('street')} />
             <p>{errors.street?.message}</p>
 
-            <div className={classes.inlineFlex}>
+            <div className={classes.inlineFlex} style={{marginBottom: '24px'}}>
               <div>
                 <label className={classes.Label} htmlFor='city'>
                   City
@@ -183,7 +243,7 @@ export default function InvoiceDrawer({
               </div>
             </div>
 
-            <div className={classes.inlineFlex} style={{marginTop: '48px', marginBottom: '32px'}}>
+            <div className={classes.inlineFlex} style={{marginTop: '24px', marginBottom: '0px'}}>
               <div>
                 <label className={classes.Label} htmlFor='createdAt'>
                   Invoice Date
@@ -191,6 +251,7 @@ export default function InvoiceDrawer({
                 <input
                   className={clsx(classes.Input, classes.mdInput)}
                   id='createdAt'
+                  type='date'
                   {...register('createdAt')}
                 />
                 <p>{errors.createdAt?.message}</p>
@@ -212,23 +273,80 @@ export default function InvoiceDrawer({
             <label className={classes.Label} htmlFor='description'>
               Project Description
             </label>
-            <input className={classes.Input} id='description' {...register('description')} />
+            <input
+              className={classes.Input}
+              id='description'
+              {...register('description')}
+              style={{marginBottom: '32px'}}
+            />
 
             <p className={classes.sectionLg}>Item List</p>
-          </form>
 
-          <div className={classes.footer}>
-            <Dialog.Close asChild>
-              <div>
-                <Button variant='edit'>Cancel</Button>
-              </div>
-            </Dialog.Close>
-            <Dialog.Close asChild>
-              <div>
-                <Button hasAddIcon={false}>Save changes</Button>
-              </div>
-            </Dialog.Close>
-          </div>
+            <div className={classes.itemLabels}>
+              <label className={classes.Label}>Item Name</label>
+              <label className={classes.Label}>Qty.</label>
+              <label className={classes.Label}>Price</label>
+              <label className={classes.Label}>Total</label>
+            </div>
+
+            <div className={classes.itemFields}>
+              {invoice?.items?.map((item: any, idx: number) => (
+                <div key={item.name + idx.toString()} className={classes.itemBox}>
+                  <input
+                    className={classes.Input}
+                    id='name'
+                    {...register(`items.${idx}.name`)}
+                    style={{marginBottom: 0}}
+                  />
+                  <input
+                    className={classes.Input}
+                    id='quantity'
+                    {...register(`items.${idx}.quantity`)}
+                    style={{marginBottom: 0}}
+                  />
+                  <input
+                    className={classes.Input}
+                    id='price'
+                    {...register(`items.${idx}.price`)}
+                    style={{marginBottom: 0}}
+                  />
+                  <input
+                    className={classes.Input}
+                    id='total'
+                    {...register(`items.${idx}.total`)}
+                    style={{marginBottom: 0, border: 'none', color: '#888EB0', marginRight: '22px'}}
+                  />
+
+                  <MdDelete
+                    color='#888EB0'
+                    size={40}
+                    className={classes.delIcon}
+                    onClick={() => handleDeleteItem(idx)}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <Button variant='large' onClick={handleAddNewItem}>
+              + Add New Item
+            </Button>
+
+            <div className={classes.footer}>
+              <Dialog.Close asChild>
+                <div>
+                  <Button variant='edit'>Cancel</Button>
+                </div>
+              </Dialog.Close>
+
+              <Dialog.Close asChild>
+                <div>
+                  <Button hasAddIcon={false} onClick={handleSubmit(onSubmit)}>
+                    Save changes
+                  </Button>
+                </div>
+              </Dialog.Close>
+            </div>
+          </form>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
