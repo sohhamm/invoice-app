@@ -29,7 +29,7 @@ export default function InvoiceFilter({opts, setOpts}: InvoiceFilterProps) {
       <DropdownMenu.Trigger asChild>
         <div aria-label='Select invoice filter' className={classes.btn}>
           <span>Filter by status</span>
-          <HiChevronDown color='#7C5DFA' />
+          <HiChevronDown color='#7C5DFA' strokeWidth={3} />
         </div>
       </DropdownMenu.Trigger>
 

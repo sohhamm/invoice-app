@@ -36,3 +36,43 @@
   left: 0;
   right: 0;
 }
+
+.bottomBox {
+  color: white;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottomBox > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 80px;
+}
+
+.toggle {
+  border-bottom: 1px solid #494e6e;
+}
+
+.toggleIcon:hover {
+  cursor: pointer;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  transition: all 300ms ease;
+}
+
+.avatar:hover {
+  cursor: pointer;
+  width: 44px;
+  height: 44px;
+}

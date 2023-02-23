@@ -33,7 +33,7 @@ export default function Button({
       onClick={onClick}
       type={type}
     >
-      {hasAddIcon && <HiPlusCircle size={32} />}
+      {hasAddIcon && <HiPlusCircle size={36} style={{marginLeft: '-12px'}} />}
       {children}
     </button>
   )
