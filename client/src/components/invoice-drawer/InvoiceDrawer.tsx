@@ -7,7 +7,9 @@ import {yupResolver} from '@hookform/resolvers/yup'
 import {useForm} from 'react-hook-form'
 import {MdDelete} from 'react-icons/md'
 import {invoiceSchema} from './utils/schema'
-import {InvoiceFormActionType, InvoiceFormData} from '@/types'
+import {InvoiceFormKey} from './utils'
+import {InvoiceFormActionType} from '@/types'
+import type {InvoiceFormData} from '@/types'
 
 type InvoiceDrawerProps =
   | {
@@ -57,8 +59,7 @@ export default function InvoiceDrawer({
   const {
     register,
     handleSubmit,
-    formState: {errors},
-    getValues,
+    formState: {errors, isValid},
     setValue,
   } = useForm<InvoiceFormData>({resolver: yupResolver(invoiceSchema), defaultValues})
 
@@ -101,6 +102,11 @@ export default function InvoiceDrawer({
     setValue('items', items)
   }
 
+  const isError = (key: string) => {
+    const _errors = errors as any
+    return {msg: _errors[key]?.message, error: !!_errors[key]?.message}
+  }
+
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
@@ -125,152 +131,318 @@ export default function InvoiceDrawer({
           <form>
             <p className={classes.section}>Bill From</p>
 
-            <label className={classes.Label} htmlFor='street'>
-              Street
-            </label>
-            <input className={classes.Input} id='street' {...register('street')} />
-            <p>{errors.street?.message}</p>
+            <div className={classes.labelBox}>
+              <label
+                className={clsx(
+                  classes.label,
+                  isError(InvoiceFormKey.STREET).error && classes.labelError,
+                )}
+                htmlFor={InvoiceFormKey.STREET}
+              >
+                Street
+              </label>
+
+              <p className={classes.error}>{isError(InvoiceFormKey.STREET).msg}</p>
+            </div>
+            <input
+              className={clsx(
+                classes.Input,
+                isError(InvoiceFormKey.STREET).error && classes.inputError,
+              )}
+              id={InvoiceFormKey.STREET}
+              {...register(InvoiceFormKey.STREET)}
+            />
 
             <div className={classes.inlineFlex} style={{marginBottom: '24px'}}>
               <div>
-                <label className={classes.Label} htmlFor='city'>
-                  City
-                </label>
+                <div className={classes.labelBox}>
+                  <label
+                    className={clsx(
+                      classes.label,
+                      isError(InvoiceFormKey.CITY).error && classes.labelError,
+                    )}
+                    htmlFor={InvoiceFormKey.CITY}
+                  >
+                    City
+                  </label>
+                  <p className={classes.error}>{isError(InvoiceFormKey.CITY).msg}</p>
+                </div>
                 <input
-                  className={clsx(classes.Input, classes.smallInput)}
-                  id='city'
-                  {...register('city')}
+                  className={clsx(
+                    classes.Input,
+                    classes.smallInput,
+                    isError(InvoiceFormKey.CITY).error && classes.inputError,
+                  )}
+                  id={InvoiceFormKey.CITY}
+                  {...register(InvoiceFormKey.CITY)}
                 />
-                <p>{errors.city?.message}</p>
               </div>
 
               <div>
-                <label className={classes.Label} htmlFor='postCode'>
-                  Post code
-                </label>
+                <div className={classes.labelBox}>
+                  <label
+                    className={clsx(
+                      classes.label,
+                      isError(InvoiceFormKey.POSTCODE).error && classes.labelError,
+                    )}
+                    htmlFor={InvoiceFormKey.POSTCODE}
+                  >
+                    Post code
+                  </label>
+                  <p className={classes.error}>{isError(InvoiceFormKey.POSTCODE).msg}</p>
+                </div>
                 <input
-                  className={clsx(classes.Input, classes.smallInput)}
-                  id='postCode'
-                  {...register('postCode')}
+                  className={clsx(
+                    classes.Input,
+                    classes.smallInput,
+                    isError(InvoiceFormKey.POSTCODE).error && classes.inputError,
+                  )}
+                  id={InvoiceFormKey.POSTCODE}
+                  {...register(InvoiceFormKey.POSTCODE)}
                 />
-                <p>{errors.postCode?.message}</p>
               </div>
 
               <div>
-                <label className={classes.Label} htmlFor='country'>
-                  Country
-                </label>
+                <div className={classes.labelBox}>
+                  <label
+                    className={clsx(
+                      classes.label,
+                      isError(InvoiceFormKey.COUNTRY).error && classes.labelError,
+                    )}
+                    htmlFor={InvoiceFormKey.COUNTRY}
+                  >
+                    Country
+                  </label>
+                  <p className={classes.error}>{isError(InvoiceFormKey.COUNTRY).msg}</p>
+                </div>
                 <input
-                  className={clsx(classes.Input, classes.smallInput)}
-                  id='country'
-                  {...register('country')}
+                  className={clsx(
+                    classes.Input,
+                    classes.smallInput,
+                    isError(InvoiceFormKey.COUNTRY).error && classes.inputError,
+                  )}
+                  id={InvoiceFormKey.COUNTRY}
+                  {...register(InvoiceFormKey.COUNTRY)}
                 />
-                <p>{errors.country?.message}</p>
               </div>
             </div>
 
             <p className={classes.section}>Bill To</p>
+            <div className={classes.labelBox}>
+              <label
+                className={clsx(
+                  classes.label,
+                  isError(InvoiceFormKey.CLIENT_NAME).error && classes.labelError,
+                )}
+                htmlFor={InvoiceFormKey.CLIENT_NAME}
+              >
+                Client's Name
+              </label>
+              <p className={classes.error}>{isError(InvoiceFormKey.CLIENT_NAME).msg}</p>
+            </div>
+            <input
+              className={clsx(
+                classes.Input,
+                isError(InvoiceFormKey.CLIENT_NAME).error && classes.inputError,
+              )}
+              id={InvoiceFormKey.CLIENT_NAME}
+              {...register(InvoiceFormKey.CLIENT_NAME)}
+            />
 
-            <label className={classes.Label} htmlFor='clientName'>
-              Client's Name
-            </label>
-            <input className={classes.Input} id='clientName' {...register('clientName')} />
-            <p>{errors.clientName?.message}</p>
+            {/* client email start */}
+            <div className={classes.labelBox}>
+              <label
+                className={clsx(
+                  classes.label,
+                  isError(InvoiceFormKey.CLIENT_EMAIL).error && classes.labelError,
+                )}
+                htmlFor={InvoiceFormKey.CLIENT_EMAIL}
+              >
+                Client's Email
+              </label>
+              <p className={classes.error}>{isError(InvoiceFormKey.CLIENT_EMAIL).msg}</p>
+            </div>
+            <input
+              className={clsx(
+                classes.Input,
+                isError(InvoiceFormKey.CLIENT_EMAIL).error && classes.inputError,
+              )}
+              id={InvoiceFormKey.CLIENT_EMAIL}
+              {...register(InvoiceFormKey.CLIENT_EMAIL)}
+            />
+            {/* client email end */}
 
-            <label className={classes.Label} htmlFor='clientEmail'>
-              Client's Email
-            </label>
-            <input className={classes.Input} id='clientEmail' {...register('clientEmail')} />
-            <p>{errors.clientEmail?.message}</p>
-
-            <label className={classes.Label} htmlFor='clientStreet'>
-              Street
-            </label>
-            <input className={classes.Input} id='clientStreet' {...register('clientStreet')} />
-            <p>{errors.clientStreet?.message}</p>
+            {/* client street start */}
+            <div className={classes.labelBox}>
+              <label
+                className={clsx(
+                  classes.label,
+                  isError(InvoiceFormKey.CLIENT_STREET).error && classes.labelError,
+                )}
+                htmlFor={InvoiceFormKey.CLIENT_STREET}
+              >
+                Street
+              </label>
+              <p className={classes.error}>{isError(InvoiceFormKey.CLIENT_STREET).msg}</p>
+            </div>
+            <input
+              className={clsx(
+                classes.Input,
+                isError(InvoiceFormKey.CLIENT_STREET).error && classes.inputError,
+              )}
+              id={InvoiceFormKey.CLIENT_STREET}
+              {...register(InvoiceFormKey.CLIENT_STREET)}
+            />
+            {/* client street end */}
 
             <div className={classes.inlineFlex}>
               <div>
-                <label className={classes.Label} htmlFor='clientCity'>
-                  City
-                </label>
+                <div className={classes.labelBox}>
+                  <label
+                    className={clsx(
+                      classes.label,
+                      isError(InvoiceFormKey.CLIENT_CITY).error && classes.labelError,
+                    )}
+                    htmlFor={InvoiceFormKey.CLIENT_CITY}
+                  >
+                    City
+                  </label>
+                  <p className={classes.error}>{isError(InvoiceFormKey.CLIENT_CITY).msg}</p>
+                </div>
                 <input
-                  className={clsx(classes.Input, classes.smallInput)}
-                  id='clientCity'
-                  {...register('clientCity')}
+                  className={clsx(
+                    classes.Input,
+                    classes.smallInput,
+                    isError(InvoiceFormKey.CLIENT_CITY).error && classes.inputError,
+                  )}
+                  id={InvoiceFormKey.CLIENT_CITY}
+                  {...register(InvoiceFormKey.CLIENT_CITY)}
                 />
-                <p>{errors.clientCity?.message}</p>
               </div>
 
               <div>
-                <label className={classes.Label} htmlFor='clientPostCode'>
-                  Post code
-                </label>
+                <div className={classes.labelBox}>
+                  <label
+                    className={clsx(
+                      classes.label,
+                      isError(InvoiceFormKey.CLIENT_POSTCODE).error && classes.labelError,
+                    )}
+                    htmlFor={InvoiceFormKey.CLIENT_POSTCODE}
+                  >
+                    Post code
+                  </label>
+                  <p className={classes.error}>{isError(InvoiceFormKey.CLIENT_POSTCODE).msg}</p>
+                </div>
                 <input
-                  className={clsx(classes.Input, classes.smallInput)}
-                  id='clientPostCode'
-                  {...register('clientPostCode')}
+                  className={clsx(
+                    classes.Input,
+                    classes.smallInput,
+                    isError(InvoiceFormKey.CLIENT_POSTCODE).error && classes.inputError,
+                  )}
+                  id={InvoiceFormKey.CLIENT_POSTCODE}
+                  {...register(InvoiceFormKey.CLIENT_POSTCODE)}
                 />
-                <p>{errors.clientPostCode?.message}</p>
               </div>
 
               <div>
-                <label className={classes.Label} htmlFor='clientCountry'>
-                  Country
-                </label>
+                <div className={classes.labelBox}>
+                  <label
+                    className={clsx(
+                      classes.label,
+                      isError(InvoiceFormKey.CLIENT_COUNTRY).error && classes.labelError,
+                    )}
+                    htmlFor={InvoiceFormKey.CLIENT_COUNTRY}
+                  >
+                    Country
+                  </label>
+                  <p className={classes.error}>{isError(InvoiceFormKey.CLIENT_COUNTRY).msg}</p>
+                </div>
                 <input
-                  className={clsx(classes.Input, classes.smallInput)}
-                  id='clientCountry'
-                  {...register('clientCountry')}
+                  className={clsx(
+                    classes.Input,
+                    classes.smallInput,
+                    isError(InvoiceFormKey.CLIENT_COUNTRY).error && classes.inputError,
+                  )}
+                  id={InvoiceFormKey.CLIENT_COUNTRY}
+                  {...register(InvoiceFormKey.CLIENT_COUNTRY)}
                 />
-                <p>{errors.clientCountry?.message}</p>
               </div>
             </div>
 
             <div className={classes.inlineFlex} style={{marginTop: '24px', marginBottom: '0px'}}>
               <div>
-                <label className={classes.Label} htmlFor='createdAt'>
-                  Invoice Date
-                </label>
+                <div className={classes.labelBox}>
+                  <label
+                    className={clsx(
+                      classes.label,
+                      isError(InvoiceFormKey.CREATED_AT).error && classes.labelError,
+                    )}
+                    htmlFor={InvoiceFormKey.CREATED_AT}
+                  >
+                    Invoice Date
+                  </label>
+
+                  <p className={classes.error}>{isError(InvoiceFormKey.CREATED_AT).msg}</p>
+                </div>
                 <input
                   className={clsx(classes.Input, classes.mdInput)}
-                  id='createdAt'
+                  id={InvoiceFormKey.CREATED_AT}
                   type='date'
-                  {...register('createdAt')}
+                  {...register(InvoiceFormKey.CREATED_AT)}
                 />
-                <p>{errors.createdAt?.message}</p>
               </div>
 
+              {/* payment terms start */}
               <div>
-                <label className={classes.Label} htmlFor='paymentTerms'>
-                  Payment Terms
-                </label>
+                <div className={classes.labelBox}>
+                  <label
+                    className={clsx(
+                      classes.label,
+                      isError(InvoiceFormKey.PAYMENT_TERMS).error && classes.labelError,
+                    )}
+                    htmlFor={InvoiceFormKey.PAYMENT_TERMS}
+                  >
+                    Payment Terms
+                  </label>
+                  <p className={classes.error}>{isError(InvoiceFormKey.PAYMENT_TERMS).msg}</p>
+                </div>
                 <input
                   className={clsx(classes.Input, classes.mdInput)}
-                  id='paymentTerms'
-                  {...register('paymentTerms')}
+                  id={InvoiceFormKey.PAYMENT_TERMS}
+                  {...register(InvoiceFormKey.PAYMENT_TERMS)}
                 />
-                <p>{errors.paymentTerms?.message}</p>
               </div>
             </div>
+            {/* payment terms end */}
 
-            <label className={classes.Label} htmlFor='description'>
-              Project Description
-            </label>
+            {/* description start */}
+            <div className={classes.labelBox}>
+              <label
+                className={clsx(
+                  classes.label,
+                  isError(InvoiceFormKey.DESCRIPTION).error && classes.labelError,
+                )}
+                htmlFor={InvoiceFormKey.DESCRIPTION}
+              >
+                Project Description
+              </label>
+              <p className={classes.error}>{isError(InvoiceFormKey.DESCRIPTION).msg}</p>
+            </div>
             <input
               className={classes.Input}
-              id='description'
-              {...register('description')}
+              id={InvoiceFormKey.DESCRIPTION}
+              {...register(InvoiceFormKey.DESCRIPTION)}
               style={{marginBottom: '32px'}}
             />
+            {/* description end */}
 
             <p className={classes.sectionLg}>Item List</p>
 
             <div className={classes.itemLabels}>
-              <label className={classes.Label}>Item Name</label>
-              <label className={classes.Label}>Qty.</label>
-              <label className={classes.Label}>Price</label>
-              <label className={classes.Label}>Total</label>
+              <label className={classes.label}>Item Name</label>
+              <label className={classes.label}>Qty.</label>
+              <label className={classes.label}>Price</label>
+              <label className={classes.label}>Total</label>
             </div>
 
             <div className={classes.itemFields}>
@@ -314,6 +486,13 @@ export default function InvoiceDrawer({
             <Button variant='large' onClick={handleAddNewItem}>
               + Add New Item
             </Button>
+
+            {!isValid && (
+              <div className={classes.footerError}>
+                <div className={clsx(classes.error)}>- All fields must be added</div>
+                <div className={clsx(classes.error)}>- An item must be added</div>
+              </div>
+            )}
 
             {isEdit ? (
               <div className={clsx(classes.footer, classes.editFooter)}>
