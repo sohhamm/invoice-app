@@ -11,6 +11,7 @@ interface ButtonProps {
   variant?: Variant
   onClick?: any
   type?: 'button' | 'submit' | 'reset'
+  overrideStyles?: React.CSSProperties
 }
 
 export default function Button({
@@ -19,6 +20,7 @@ export default function Button({
   hasAddIcon = false,
   variant = 'default',
   type = 'button',
+  overrideStyles = {},
 }: ButtonProps) {
   return (
     <button
@@ -32,6 +34,7 @@ export default function Button({
       )}
       onClick={onClick}
       type={type}
+      style={{...overrideStyles}}
     >
       {hasAddIcon && <HiPlusCircle size={36} style={{marginLeft: '-12px'}} />}
       {children}

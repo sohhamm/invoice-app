@@ -1,3 +1,6 @@
+import {InferType} from 'yup'
+import {invoiceSchema} from '@/components/invoice-drawer/utils/schema'
+
 export type test = string | number
 
 export type Option = {
@@ -33,4 +36,13 @@ export interface IItem {
   quantity: number
   price: number
   total: number
+}
+
+export type InvoiceFormData = InferType<typeof invoiceSchema>
+
+export enum InvoiceFormActionType {
+  NEW = 'new',
+  EDIT = 'edit',
+  DRAFT = 'draft',
+  // DISCARD = 'discard',
 }

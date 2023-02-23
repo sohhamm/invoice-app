@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as yup from 'yup'
 import * as Dialog from '@radix-ui/react-dialog'
 import clsx from 'clsx'
 import Button from '@/components/ui/button'
@@ -7,58 +6,37 @@ import classes from './invoice-drawer.module.css'
 import {yupResolver} from '@hookform/resolvers/yup'
 import {useForm} from 'react-hook-form'
 import {MdDelete} from 'react-icons/md'
+import {invoiceSchema} from './utils/schema'
+import {InvoiceFormActionType, InvoiceFormData} from '@/types'
 
-const schema = yup
-  .object({
-    street: yup.string().required(),
-    city: yup.string().required(),
-    postCode: yup.string().required(),
-    country: yup.string().required(),
-    clientName: yup.string().required(),
-    clientEmail: yup.string().email().required(),
-
-    clientStreet: yup.string().required(),
-    clientCity: yup.string().required(),
-    clientPostCode: yup.string().required(),
-    clientCountry: yup.string().required(),
-
-    createdAt: yup.date().required(),
-    paymentDue: yup.string().required(),
-
-    paymentTerms: yup.number().required(),
-
-    description: yup.string().required(),
-
-    items: yup
-      .array()
-      .of(
-        yup.object().shape({
-          name: yup.string(),
-          quantity: yup.string(),
-          price: yup.string(),
-          total: yup.string(),
-        }),
-      )
-      .required(),
-  })
-  .required()
-
-type FormData = yup.InferType<typeof schema>
-
-interface InvoiceDrawerProps {
-  invoice?: any
-  handleEditInvoice?: any
-  isEdit?: boolean
-}
+type InvoiceDrawerProps =
+  | {
+      invoice?: any
+      handleEditInvoice?: any
+      handleNewInvoice: any
+      handleDraftInvoice: any
+      isEdit?: boolean
+    }
+  | {
+      invoice?: any
+      handleEditInvoice: any
+      handleNewInvoice?: any
+      handleDraftInvoice?: any
+      isEdit?: boolean
+    }
 
 export default function InvoiceDrawer({
   invoice,
   handleEditInvoice,
+  handleNewInvoice,
+  handleDraftInvoice,
   isEdit = false,
 }: InvoiceDrawerProps) {
   const [open, setOpen] = React.useState(false)
 
-  const defaultValues: FormData = {
+  const [tempItems, setTempItems] = React.useState(invoice?.items)
+
+  const defaultValues: InvoiceFormData = {
     street: invoice?.senderAddress.street || '',
     city: invoice?.senderAddress.city || '',
     postCode: invoice?.senderAddress.postCode || '',
@@ -79,33 +57,39 @@ export default function InvoiceDrawer({
   const {
     register,
     handleSubmit,
-    watch,
     formState: {errors},
     getValues,
     setValue,
-  } = useForm<FormData>({resolver: yupResolver(schema), defaultValues})
+  } = useForm<InvoiceFormData>({resolver: yupResolver(invoiceSchema), defaultValues})
 
-  console.log(getValues)
-
-  const onSubmit = (data: FormData) => {
-    console.log(data)
-
+  const onSubmit = async (data: InvoiceFormData, action: InvoiceFormActionType) => {
+    console.log(data, 'data')
     const payload = data
-    handleEditInvoice(payload)
+
+    if (action === InvoiceFormActionType.EDIT) {
+      await handleEditInvoice(payload)
+    }
+    if (action === InvoiceFormActionType.NEW) {
+      await handleNewInvoice(payload)
+    }
+    if (action === InvoiceFormActionType.DRAFT) {
+      await handleDraftInvoice(payload)
+    }
     setOpen(false)
   }
 
   const handleDeleteItem = (idx: number) => {
-    const items = [...getValues('items')]
-
-    const newItems = items.splice(idx, 1)
-
-    setValue('items', newItems)
+    setTempItems((oldState: any) => {
+      const items = [...oldState]
+      items.splice(idx, 1)
+      setValue('items', items)
+      return items
+    })
   }
 
   const handleAddNewItem = () => {
     const items = [
-      ...getValues('items'),
+      ...tempItems,
       {
         name: '',
         quantity: '',
@@ -113,7 +97,7 @@ export default function InvoiceDrawer({
         total: '',
       },
     ]
-
+    setTempItems(items)
     setValue('items', items)
   }
 
@@ -138,7 +122,7 @@ export default function InvoiceDrawer({
               'New Invoice'
             )}
           </Dialog.Title>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form>
             <p className={classes.section}>Bill From</p>
 
             <label className={classes.Label} htmlFor='street'>
@@ -290,7 +274,7 @@ export default function InvoiceDrawer({
             </div>
 
             <div className={classes.itemFields}>
-              {invoice?.items?.map((item: any, idx: number) => (
+              {tempItems?.map((item: any, idx: number) => (
                 <div key={item.name + idx.toString()} className={classes.itemBox}>
                   <input
                     className={classes.Input}
@@ -331,21 +315,55 @@ export default function InvoiceDrawer({
               + Add New Item
             </Button>
 
-            <div className={classes.footer}>
-              <Dialog.Close asChild>
-                <div>
-                  <Button variant='edit'>Cancel</Button>
-                </div>
-              </Dialog.Close>
+            {isEdit ? (
+              <div className={clsx(classes.footer, classes.editFooter)}>
+                <Dialog.Close asChild>
+                  <div>
+                    <Button variant='edit'>Cancel</Button>
+                  </div>
+                </Dialog.Close>
 
-              <Dialog.Close asChild>
-                <div>
-                  <Button hasAddIcon={false} onClick={handleSubmit(onSubmit)}>
-                    Save changes
-                  </Button>
+                <Dialog.Close asChild>
+                  <div>
+                    <Button
+                      hasAddIcon={false}
+                      onClick={handleSubmit(data => onSubmit(data, InvoiceFormActionType.EDIT))}
+                    >
+                      Save changes
+                    </Button>
+                  </div>
+                </Dialog.Close>
+              </div>
+            ) : (
+              <div className={clsx(classes.footer, classes.newFooter)}>
+                <Button variant='edit' overrideStyles={{width: '97px'}}>
+                  Discard
+                </Button>
+                <div className={classes.newFooterGroup}>
+                  <Dialog.Close asChild>
+                    <div>
+                      <Button
+                        variant='draft'
+                        onClick={handleSubmit(data => onSubmit(data, InvoiceFormActionType.DRAFT))}
+                      >
+                        Save as Draft
+                      </Button>
+                    </div>
+                  </Dialog.Close>
+
+                  <Dialog.Close asChild>
+                    <div>
+                      <Button
+                        hasAddIcon={false}
+                        onClick={handleSubmit(data => onSubmit(data, InvoiceFormActionType.NEW))}
+                      >
+                        Save & Send
+                      </Button>
+                    </div>
+                  </Dialog.Close>
                 </div>
-              </Dialog.Close>
-            </div>
+              </div>
+            )}
           </form>
         </Dialog.Content>
       </Dialog.Portal>

@@ -20,6 +20,9 @@ export default function Invoices() {
 
   const fetchingInvoices = false
 
+  const handleNewInvoice = (payload: any) => {}
+  const handleDraftInvoice = (payload: any) => {}
+
   return (
     <div>
       <div className={classes.header}>
@@ -31,7 +34,10 @@ export default function Invoices() {
         <div className={classes.ctaBox}>
           <InvoiceFilter opts={opts} setOpts={setOpts} />
 
-          <InvoiceDrawer />
+          <InvoiceDrawer
+            handleNewInvoice={handleNewInvoice}
+            handleDraftInvoice={handleDraftInvoice}
+          />
         </div>
       </div>
 

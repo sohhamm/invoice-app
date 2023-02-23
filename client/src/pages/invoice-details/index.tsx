@@ -1,5 +1,6 @@
 import * as React from 'react'
 import clsx from 'clsx'
+import InvoiceDrawer from '@/components/invoice-drawer'
 import Status from '@/components/status'
 import DeleteConfirm from '@/components/delete-confirm'
 import Button from '@/components/ui/button'
@@ -9,7 +10,6 @@ import {Link, useParams} from 'react-router-dom'
 import {HiChevronLeft} from 'react-icons/hi2'
 import {INVOICES, currencyFormatter} from '@/utils'
 import d from '../../../data.json'
-import InvoiceDrawer from '@/components/invoice-drawer/InvoiceDrawer'
 
 export default function InvoiceDetails() {
   const {id} = useParams()
@@ -20,7 +20,7 @@ export default function InvoiceDetails() {
 
   const handlePaid = () => {}
 
-  const handleEdit = () => {}
+  const handleEditInvoice = (payload: any) => {}
 
   return (
     <div className={classes.box}>
@@ -39,7 +39,7 @@ export default function InvoiceDetails() {
         </div>
 
         <div className={classes.cta}>
-          <InvoiceDrawer invoice={invoice} handleEditInvoice={handleEdit} isEdit={true} />
+          <InvoiceDrawer invoice={invoice} handleEditInvoice={handleEditInvoice} isEdit={true} />
           <DeleteConfirm onDelete={onDelete} invoiceId={invoice.id} />
           <Button hasAddIcon={false} onClick={handlePaid}>
             Mark as Paid
@@ -85,12 +85,12 @@ export default function InvoiceDetails() {
           <div className={classes.middleCenter}>
             <p className={classes.middleCenterLabel}>Bill To</p>
             <p className={classes.clientName}>{invoice.clientName}</p>
-            <p className={classes.clientAddress}>
+            <div className={classes.clientAddress}>
               <div>{invoice.clientAddress.street}</div>
               <div>{invoice.clientAddress.city}</div>
               <div>{invoice.clientAddress.postCode}</div>
               <div>{invoice.clientAddress.country}</div>
-            </p>
+            </div>
           </div>
 
           <div>
@@ -114,7 +114,7 @@ export default function InvoiceDetails() {
           </thead>
           <tbody>
             {invoice.items.map((item: any) => (
-              <tr className={classes.item}>
+              <tr className={classes.item} key={item.name}>
                 <td className={classes.itemBody} style={{textAlign: 'start'}}>
                   {item.name}
                 </td>
