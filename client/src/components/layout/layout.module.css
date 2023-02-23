@@ -11,3 +11,9 @@
   max-width: 730px;
   margin: 0 auto;
 }
+
+@media (max-width: 800px) {
+  .container {
+    padding-top: 80px;
+  }
+}
