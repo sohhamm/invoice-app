@@ -8,9 +8,9 @@ import {useForm} from 'react-hook-form'
 import {MdDelete} from 'react-icons/md'
 import {invoiceSchema} from './utils/schema'
 import {InvoiceFormKey} from './utils'
+import {useMobile} from '@/utils/hooks/use-media-query'
 import {InvoiceFormActionType} from '@/types'
 import type {InvoiceFormData} from '@/types'
-import {useMobile} from '@/utils/hooks/use-media-query'
 
 type InvoiceDrawerProps =
   | {
@@ -456,24 +456,28 @@ export default function InvoiceDrawer({
                   <input
                     className={classes.Input}
                     id='name'
+                    // @ts-ignore
                     {...register(`items.${idx}.name`)}
                     style={{marginBottom: 0}}
                   />
                   <input
                     className={classes.Input}
                     id='quantity'
+                    // @ts-ignore
                     {...register(`items.${idx}.quantity`)}
                     style={{marginBottom: 0}}
                   />
                   <input
                     className={classes.Input}
                     id='price'
+                    // @ts-ignore
                     {...register(`items.${idx}.price`)}
                     style={{marginBottom: 0}}
                   />
                   <input
                     className={classes.Input}
                     id='total'
+                    // @ts-ignore
                     {...register(`items.${idx}.total`)}
                     style={{marginBottom: 0, border: 'none', color: '#888EB0', marginRight: '22px'}}
                   />
