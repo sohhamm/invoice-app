@@ -122,6 +122,16 @@
   .toggle {
     border-right: 1px solid #494e6e;
   }
+
+  .avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .avatar:hover {
+    width: 35px;
+    height: 35px;
+  }
 }
 
 @media (max-width: 600px) {
