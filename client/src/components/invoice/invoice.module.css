@@ -61,3 +61,17 @@
 a {
   text-decoration: none;
 }
+
+@media (max-width: 964px) {
+  .box {
+    padding-left: 24px;
+  }
+
+  .leftBox {
+    column-gap: 30px;
+  }
+
+  .rightBox {
+    column-gap: 30px;
+  }
+}

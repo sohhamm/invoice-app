@@ -3,6 +3,8 @@
   width: 100%;
   background-color: var(--bg);
   background-color: #f8f8fb;
+
+  padding-bottom: 80px;
 }
 
 .box {
@@ -12,8 +14,15 @@
   margin: 0 auto;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 964px) {
   .container {
     padding-top: 80px;
+  }
+}
+
+@media (max-width: 775px) {
+  .box {
+    padding-left: 30px;
+    padding-right: 30px;
   }
 }

@@ -1,4 +1,7 @@
 :root {
+  --size-md: 964px;
+  --size-sm: 450px;
+
   --bg: hsl(0, 0%, 100%);
   --btn-edit-bg: #f9fafe;
   --btn-edit-color: #7e88c3;

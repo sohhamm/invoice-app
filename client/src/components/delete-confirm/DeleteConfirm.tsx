@@ -30,10 +30,12 @@ export default function DeleteConfirm({
           <AlertDialog.Description className={classes.AlertDialogDescription}>
             Are you sure you want to delete invoice #{invoiceId}? This action cannot be undone.
           </AlertDialog.Description>
-          <div style={{display: 'flex', gap: 25, justifyContent: 'flex-end'}}>
+          <div className={classes.footer}>
             <AlertDialog.Cancel asChild>
               <div>
-                <Button variant='edit'>Cancel</Button>
+                <Button variant='edit' overrideStyles={{width: '91px'}}>
+                  Cancel
+                </Button>
               </div>
             </AlertDialog.Cancel>
             <AlertDialog.Action asChild>

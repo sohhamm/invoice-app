@@ -76,7 +76,7 @@
   height: 44px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 964px) {
   .box {
     top: 0;
     left: auto;

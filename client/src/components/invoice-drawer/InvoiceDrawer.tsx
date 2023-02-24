@@ -36,7 +36,7 @@ export default function InvoiceDrawer({
 }: InvoiceDrawerProps) {
   const [open, setOpen] = React.useState(false)
 
-  const [tempItems, setTempItems] = React.useState(invoice?.items)
+  const [tempItems, setTempItems] = React.useState(invoice?.items || [])
 
   const defaultValues: InvoiceFormData = {
     street: invoice?.senderAddress.street || '',

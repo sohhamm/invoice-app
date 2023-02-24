@@ -187,3 +187,15 @@ td {
   letter-spacing: -0.25px;
   color: #0c0e16;
 }
+
+@media (max-width: 946px) {
+  .details {
+    padding: 32px;
+  }
+}
+
+@media (max-width: 750px) {
+  .middle {
+    column-gap: 60px;
+  }
+}

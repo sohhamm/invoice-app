@@ -8,7 +8,6 @@
 
 .DialogContent {
   background-color: white;
-
   border-radius: 0px 20px 20px 0px;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   position: fixed;
@@ -19,11 +18,10 @@
   max-width: 616px;
   max-height: 100vh;
   padding: 56px;
-
   padding-bottom: 0;
-
   overflow-y: scroll;
 }
+
 .DialogContent:focus {
   outline: none;
 }
@@ -193,4 +191,17 @@
 
 .delIcon:hover {
   cursor: pointer;
+}
+
+@media (max-width: 964px) {
+  .DialogOverlay {
+    left: 0;
+    top: 80px;
+  }
+
+  .DialogContent {
+    top: 80px;
+    left: 0;
+    width: 100%;
+  }
 }

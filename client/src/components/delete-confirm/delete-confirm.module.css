@@ -48,6 +48,12 @@ button {
   color: #888eb0;
 }
 
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  column-gap: 8px;
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;
