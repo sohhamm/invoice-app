@@ -16,13 +16,13 @@
 
 @media (max-width: 964px) {
   .container {
-    padding-top: 80px;
+    padding-top: 60px;
   }
 }
 
 @media (max-width: 775px) {
   .box {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }

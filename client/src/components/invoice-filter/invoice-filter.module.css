@@ -3,12 +3,9 @@
   display: flex;
   align-items: center;
   column-gap: 14px;
-
   font-weight: 700;
-  font-size: 12px;
-  line-height: 15px;
+  font-size: 0.75rem;
   letter-spacing: -0.25px;
-
   color: #0c0e16;
 }
 
@@ -16,18 +13,12 @@
   cursor: pointer;
 }
 
-/* radix styles */
-
-@import '@radix-ui/colors/blackA.css';
-@import '@radix-ui/colors/mauve.css';
-@import '@radix-ui/colors/violet.css';
-
 /* reset */
 button {
   all: unset;
 }
 
-.DropdownMenuContent {
+.dropdownMenuContent {
   width: 192px;
   height: 128px;
   background: #ffffff;
@@ -56,7 +47,7 @@ button {
   outline: none;
 
   font-weight: 700;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
   color: #1e2139;
@@ -109,5 +100,19 @@ button {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .btn {
+    margin-right: 18px;
+    column-gap: 12px;
+  }
+
+  .dropdownMenuContent {
+    width: 120px;
+    height: 120px;
+    padding: 16px;
+    margin-top: 16px;
   }
 }

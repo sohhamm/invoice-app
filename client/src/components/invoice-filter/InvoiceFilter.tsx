@@ -3,6 +3,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import classes from './invoice-filter.module.css'
 import {HiChevronDown, HiChevronUp, HiCheck} from 'react-icons/hi2'
 import {Option} from '@/types'
+import {useMobile} from '@/utils/hooks/use-media-query'
 
 interface InvoiceFilterProps {
   opts: Option
@@ -10,6 +11,7 @@ interface InvoiceFilterProps {
 }
 
 export default function InvoiceFilter({opts, setOpts}: InvoiceFilterProps) {
+  const {isMobile} = useMobile()
   const handleChange = (opt: 'draft' | 'pending' | 'paid') => {
     switch (opt) {
       case 'draft':
@@ -28,13 +30,13 @@ export default function InvoiceFilter({opts, setOpts}: InvoiceFilterProps) {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <div aria-label='Select invoice filter' className={classes.btn}>
-          <span>Filter by status</span>
+          <span>{isMobile ? 'Filter' : 'Filter by status'}</span>
           <HiChevronDown color='#7C5DFA' strokeWidth={3} />
         </div>
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className={classes.DropdownMenuContent} sideOffset={5}>
+        <DropdownMenu.Content className={classes.dropdownMenuContent} sideOffset={5}>
           <DropdownMenu.CheckboxItem
             className={classes.DropdownMenuCheckboxItem}
             checked={opts.draft}

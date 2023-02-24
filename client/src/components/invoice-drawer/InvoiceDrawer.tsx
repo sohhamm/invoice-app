@@ -10,6 +10,7 @@ import {invoiceSchema} from './utils/schema'
 import {InvoiceFormKey} from './utils'
 import {InvoiceFormActionType} from '@/types'
 import type {InvoiceFormData} from '@/types'
+import {useMobile} from '@/utils/hooks/use-media-query'
 
 type InvoiceDrawerProps =
   | {
@@ -35,8 +36,8 @@ export default function InvoiceDrawer({
   isEdit = false,
 }: InvoiceDrawerProps) {
   const [open, setOpen] = React.useState(false)
-
   const [tempItems, setTempItems] = React.useState(invoice?.items || [])
+  const {isMobile} = useMobile()
 
   const defaultValues: InvoiceFormData = {
     street: invoice?.senderAddress.street || '',
@@ -111,7 +112,11 @@ export default function InvoiceDrawer({
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
         <div>
-          {isEdit ? <Button variant='edit'>Edit</Button> : <Button hasAddIcon>New Invoice</Button>}
+          {isEdit ? (
+            <Button variant='edit'>Edit</Button>
+          ) : (
+            <Button hasAddIcon>{isMobile ? 'New' : 'New Invoice'}</Button>
+          )}
         </div>
       </Dialog.Trigger>
       <Dialog.Portal>

@@ -123,3 +123,33 @@
     border-right: 1px solid #494e6e;
   }
 }
+
+@media (max-width: 600px) {
+  .box {
+    height: 72px;
+  }
+
+  .topBox {
+    width: 72px;
+    height: 72px;
+    background-color: #7c5dfa;
+  }
+
+  .topBoxBottom {
+    width: 72px;
+  }
+
+  .logo {
+    top: 23px;
+    width: 28px;
+    height: 26px;
+  }
+
+  .bottomBox {
+    width: 160px;
+  }
+
+  .bottomBox > * {
+    height: 72px;
+  }
+}

@@ -5,7 +5,7 @@
   height: 72px;
   padding-left: 32px;
   padding-right: 24px;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
   font-weight: 700;
@@ -45,8 +45,7 @@
 }
 
 .price {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 1rem;
   letter-spacing: -0.8px;
   color: #0c0e16;
 }
@@ -73,5 +72,57 @@ a {
 
   .rightBox {
     column-gap: 30px;
+  }
+}
+
+@media (max-width: 690px) {
+  .box {
+    padding-left: 20px;
+    padding-right: 20px;
+
+    height: 60px;
+  }
+
+  .leftBox {
+    column-gap: 20px;
+  }
+
+  .rightBox {
+    column-gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .box {
+    padding: 24px;
+    height: 124px;
+  }
+
+  .leftBox,
+  .rightBox {
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    column-gap: 0;
+    height: 100%;
+  }
+
+  .rightBox {
+    align-items: flex-end;
+  }
+
+  .id {
+    min-width: auto;
+    font-size: 0.75rem;
+  }
+
+  .due,
+  .client {
+    font-size: 0.75rem;
+    min-width: auto;
+  }
+
+  .due {
+    margin-bottom: 8px;
   }
 }

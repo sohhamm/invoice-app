@@ -6,7 +6,7 @@
 .back {
   margin-bottom: 34px;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
   color: #7e88c3;
@@ -28,7 +28,7 @@
   display: flex;
   align-items: center;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
   color: #858bb2;
@@ -52,8 +52,8 @@
 
 .topLeft > h4 {
   font-weight: 700;
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 1rem;
+  line-height: 1.5rem;
   letter-spacing: -0.8px;
   color: #0c0e16;
   margin-bottom: 8px;
@@ -65,7 +65,7 @@
 
 .topLeft > p {
   font-weight: 500;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
   color: #7e88c3;
@@ -74,7 +74,7 @@
 .topRight,
 .clientAddress {
   font-weight: 500;
-  font-size: 11px;
+  font-size: 0.6875rem;
   line-height: 18px;
   text-align: right;
   letter-spacing: -0.229167px;
@@ -101,7 +101,7 @@
 .middleCenterLabel,
 .middleRightLabel {
   font-weight: 500;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
   color: #7e88c3;
@@ -113,7 +113,7 @@
 .clientName,
 .clientEmail {
   font-weight: 700;
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 20px;
   letter-spacing: -0.3125px;
   color: #0c0e16;
@@ -134,7 +134,7 @@
 
 .priceSummary > p {
   font-weight: 500;
-  font-size: 11px;
+  font-size: 0.6875rem;
   line-height: 18px;
   letter-spacing: -0.229167px;
   color: #ffffff;
@@ -142,7 +142,7 @@
 
 .priceSummary > h1 {
   font-weight: 700;
-  font-size: 24px;
+  font-size: 1.5rem;
   line-height: 32px;
   text-align: right;
   letter-spacing: -0.5px;
@@ -174,7 +174,7 @@ td {
 
 .itemLabel {
   font-weight: 500;
-  font-size: 11px;
+  font-size: 0.6875rem;
   line-height: 18px;
   letter-spacing: -0.229167px;
   color: #7e88c3;
@@ -182,13 +182,13 @@ td {
 
 .itemBody {
   font-weight: 700;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
   color: #0c0e16;
 }
 
-@media (max-width: 946px) {
+@media (max-width: 900) {
   .details {
     padding: 32px;
   }

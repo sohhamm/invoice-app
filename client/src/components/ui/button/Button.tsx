@@ -2,6 +2,7 @@ import * as React from 'react'
 import clsx from 'clsx'
 import classes from './button.module.css'
 import {HiPlusCircle} from 'react-icons/hi2'
+import {useMobile} from '@/utils/hooks/use-media-query'
 
 type Variant = 'default' | 'edit' | 'draft' | 'delete' | 'large'
 
@@ -22,6 +23,7 @@ export default function Button({
   type = 'button',
   overrideStyles = {},
 }: ButtonProps) {
+  const {isMobile} = useMobile()
   return (
     <button
       className={clsx(
@@ -31,6 +33,7 @@ export default function Button({
         isDraft(variant) && classes.btnDraft,
         isDel(variant) && classes.btnDel,
         isLg(variant) && classes.btnLg,
+        isMobile && classes.isSm,
       )}
       onClick={onClick}
       type={type}
