@@ -9,10 +9,13 @@ import {format} from 'date-fns'
 import {Link, useParams} from 'react-router-dom'
 import {HiChevronLeft} from 'react-icons/hi2'
 import {INVOICES, currencyFormatter} from '@/utils'
+import {useMobile} from '@/utils/hooks/use-media-query'
 import d from '../../../data.json'
 
 export default function InvoiceDetails() {
   const {id} = useParams()
+
+  const {isMobile} = useMobile()
 
   const invoice: any = d.find(i => i.id === id)
 
@@ -38,18 +41,19 @@ export default function InvoiceDetails() {
           <Status invoice={invoice} />
         </div>
 
-        <div className={classes.cta}>
-          <InvoiceDrawer invoice={invoice} handleEditInvoice={handleEditInvoice} isEdit={true} />
-          <DeleteConfirm onDelete={onDelete} invoiceId={invoice.id} />
-          <Button hasAddIcon={false} onClick={handlePaid}>
-            Mark as Paid
-          </Button>
-        </div>
+        {!isMobile && (
+          <CTAs
+            invoice={invoice}
+            handleEditInvoice={handleEditInvoice}
+            onDelete={onDelete}
+            handlePaid={handlePaid}
+          />
+        )}
       </div>
 
       <div className={clsx(classes.details, 'card')}>
-        <div className={classes.top}>
-          <div className={classes.topLeft}>
+        <div className={classes.invoiceHeader}>
+          <div className={classes.invoiceId}>
             <h4>
               <span>#</span>
               {invoice.id}
@@ -57,7 +61,7 @@ export default function InvoiceDetails() {
             <p>{invoice.description}</p>
           </div>
 
-          <div className={classes.topRight}>
+          <div className={classes.address}>
             <div>{invoice.senderAddress.street}</div>
             <div>{invoice.senderAddress.city}</div>
             <div>{invoice.senderAddress.postCode}</div>
@@ -65,25 +69,25 @@ export default function InvoiceDetails() {
           </div>
         </div>
 
-        <div className={classes.middle}>
+        <div className={classes.invoiceDetails}>
           <div>
-            <div className={classes.middleLeftTop}>
-              <p className={classes.middleLeftTopTitle}>Invoice Date</p>
-              <p className={classes.middleLeftTopDate}>
+            <div className={classes.invoiceDetailsDate}>
+              <p className={classes.invoiceDetailsDateTitle}>Invoice Date</p>
+              <p className={classes.invoiceDetailsDateValue}>
                 {format(new Date(invoice.createdAt), 'dd MMM yyyy')}
               </p>
             </div>
 
             <div>
-              <p className={classes.middleLeftBottomTitle}>Payment Due</p>
-              <p className={classes.middleLeftBottomDate}>
+              <p className={classes.invoiceDetailsDue}>Payment Due</p>
+              <p className={classes.invoiceDetailsDueValue}>
                 {format(new Date(invoice.paymentDue), 'dd MMM yyyy')}
               </p>
             </div>
           </div>
 
-          <div className={classes.middleCenter}>
-            <p className={classes.middleCenterLabel}>Bill To</p>
+          <div className={classes.clientAddress}>
+            <p className={classes.clientAddressLabel}>Bill To</p>
             <p className={classes.clientName}>{invoice.clientName}</p>
             <div className={classes.clientAddress}>
               <div>{invoice.clientAddress.street}</div>
@@ -93,8 +97,8 @@ export default function InvoiceDetails() {
             </div>
           </div>
 
-          <div>
-            <p className={classes.middleRightLabel}>Sent To</p>
+          <div className={classes.clientEmailLabel}>
+            <p className={classes.clientEmailLabel}>Sent To</p>
             <p className={classes.clientEmail}>{invoice.clientEmail}</p>
           </div>
         </div>
@@ -115,31 +119,69 @@ export default function InvoiceDetails() {
           <tbody>
             {invoice.items.map((item: any) => (
               <tr className={classes.item} key={item.name}>
-                <td className={classes.itemBody} style={{textAlign: 'start'}}>
-                  {item.name}
-                </td>
-                <td className={classes.itemBody} style={{textAlign: 'center', color: '#7E88C3'}}>
-                  {item.quantity}
-                </td>
-                <td className={classes.itemBody} style={{color: '#7E88C3'}}>
-                  {currencyFormatter({amount: item.price})}
-                </td>
-                <td className={classes.itemBody}> {currencyFormatter({amount: item.total})}</td>
+                {isMobile ? (
+                  <div className={classes.itemMobile}>
+                    <td className={classes.itemInfo}>
+                      <div>{item.name}</div>
+
+                      <div>
+                        {item.quantity} x {currencyFormatter({amount: item.price})}
+                      </div>
+                    </td>
+
+                    <td className={classes.itemTotal}>{currencyFormatter({amount: item.total})}</td>
+                  </div>
+                ) : (
+                  <>
+                    <td className={classes.itemBody} style={{textAlign: 'start'}}>
+                      {item.name}
+                    </td>
+                    <td
+                      className={classes.itemBody}
+                      style={{textAlign: 'center', color: '#7E88C3'}}
+                    ></td>
+                    <td className={classes.itemBody} style={{color: '#7E88C3'}}>
+                      {currencyFormatter({amount: item.price})}
+                    </td>
+                    <td className={classes.itemBody}> {currencyFormatter({amount: item.total})}</td>
+                  </>
+                )}
               </tr>
             ))}
           </tbody>
         </table>
 
         <div className={classes.priceSummary}>
-          <p>Amount Due</p>
+          <p>{isMobile ? 'Grand Total' : 'Amount Due'}</p>
 
           <h1>{currencyFormatter({amount: getTotalPrice(invoice.items)})}</h1>
         </div>
       </div>
+
+      {isMobile && (
+        <CTAs
+          invoice={invoice}
+          handleEditInvoice={handleEditInvoice}
+          onDelete={onDelete}
+          handlePaid={handlePaid}
+        />
+      )}
     </div>
   )
 }
 
 const getTotalPrice = (items: any[]) => {
   return items.reduce((acc, curr) => (acc += curr.total), 0)
+}
+
+function CTAs({invoice, handleEditInvoice, onDelete, handlePaid}: any) {
+  return (
+    <div className={classes.cta}>
+      <InvoiceDrawer invoice={invoice} handleEditInvoice={handleEditInvoice} isEdit={true} />
+      <DeleteConfirm onDelete={onDelete} invoiceId={invoice.id} />
+      <Button hasAddIcon={false} onClick={handlePaid}>
+        Mark as Paid
+      </Button>
+    </div>
+  )
 }

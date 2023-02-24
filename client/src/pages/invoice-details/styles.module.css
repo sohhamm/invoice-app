@@ -7,7 +7,6 @@
   margin-bottom: 34px;
   font-weight: 700;
   font-size: 0.75rem;
-  line-height: 15px;
   letter-spacing: -0.25px;
   color: #7e88c3;
   display: flex;
@@ -29,7 +28,6 @@
   align-items: center;
   font-weight: 500;
   font-size: 0.75rem;
-  line-height: 15px;
   letter-spacing: -0.25px;
   color: #858bb2;
   column-gap: 16px;
@@ -44,34 +42,32 @@
   padding: 48px;
 }
 
-.top {
+.invoiceHeader {
   display: flex;
   justify-content: space-between;
   margin-bottom: 24px;
 }
 
-.topLeft > h4 {
+.invoiceId > h4 {
   font-weight: 700;
   font-size: 1rem;
-  line-height: 1.5rem;
   letter-spacing: -0.8px;
   color: #0c0e16;
   margin-bottom: 8px;
 }
 
-.topLeft > h4 > span {
+.invoiceId > h4 > span {
   color: #888eb0;
 }
 
-.topLeft > p {
+.invoiceId > p {
   font-weight: 500;
   font-size: 0.75rem;
-  line-height: 15px;
   letter-spacing: -0.25px;
   color: #7e88c3;
 }
 
-.topRight,
+.address,
 .clientAddress {
   font-weight: 500;
   font-size: 0.6875rem;
@@ -83,23 +79,26 @@
 
 .clientAddress {
   text-align: left;
-  margin-top: 8px;
 }
 
-.middle {
+.clientName {
+  margin-bottom: 8px;
+}
+
+.invoiceDetails {
   display: flex;
   column-gap: 100px;
   margin-bottom: 45px;
 }
 
-.middleLeftTop {
+.invoiceDetailsDate {
   margin-bottom: 32px;
 }
 
-.middleLeftTopTitle,
-.middleLeftBottomTitle,
-.middleCenterLabel,
-.middleRightLabel {
+.invoiceDetailsDateTitle,
+.invoiceDetailsDue,
+.clientAddressLabel,
+.clientEmailLabel {
   font-weight: 500;
   font-size: 0.75rem;
   line-height: 15px;
@@ -108,8 +107,8 @@
   margin-bottom: 12px;
 }
 
-.middleLeftTopDate,
-.middleLeftBottomDate,
+.invoiceDetailsDateValue,
+.invoiceDetailsDueValue,
 .clientName,
 .clientEmail {
   font-weight: 700;
@@ -119,7 +118,7 @@
   color: #0c0e16;
 }
 
-.middleCenter {
+.clientAddress {
   margin-right: 10px;
 }
 
@@ -167,8 +166,8 @@
   text-align: start !important;
 }
 
-th,
-td {
+th.itemLabel,
+td.itemBody {
   padding-bottom: 32px;
 }
 
@@ -195,7 +194,140 @@ td {
 }
 
 @media (max-width: 750px) {
-  .middle {
+  .invoiceDetails {
     column-gap: 60px;
+  }
+}
+
+@media (max-width: 600px) {
+  .box {
+    padding-top: 40px;
+    height: 100%;
+  }
+
+  .back {
+    margin-bottom: 32px;
+  }
+
+  .header {
+    margin-bottom: 16px;
+    height: auto;
+    padding: 24px;
+  }
+
+  .status {
+    width: 100%;
+    justify-content: space-between;
+    column-gap: 0;
+  }
+
+  /* todo figure it out */
+  .cta {
+    position: fixed;
+    justify-content: center;
+    column-gap: 8px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+
+    width: 100%;
+
+    background: #ffffff;
+    box-shadow: 0px 10px 10px -10px rgba(72, 84, 159, 0.100397);
+    padding: 21px 24px 22px 24px;
+  }
+
+  .cta > button:last-child {
+    width: 100%;
+  }
+
+  .details {
+    padding: 24px;
+  }
+
+  .invoiceHeader {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 31px;
+  }
+
+  .invoiceId {
+    margin-bottom: 30px;
+  }
+
+  .invoiceId > h4 {
+    font-size: 0.75rem;
+    margin-bottom: 4px;
+  }
+
+  .address,
+  .clientAddress {
+    text-align: left;
+  }
+
+  .clientAddress {
+    margin-top: 0px;
+  }
+
+  /* middle */
+
+  .invoiceDetails {
+    display: grid;
+    column-gap: 41px;
+    margin-bottom: 40px;
+    row-gap: 46px;
+    grid-template-columns: 1fr 1.5fr;
+  }
+
+  .clientEmailLabel {
+    grid-column: 1/-1;
+  }
+
+  .invoiceDetailsDate {
+    margin-bottom: 32px;
+  }
+
+  .clientAddress {
+    margin-right: 0px;
+  }
+
+  /* bottom */
+
+  .priceSummary {
+    padding: 24px;
+  }
+
+  .items {
+    padding: 24px;
+    padding-bottom: 0;
+  }
+
+  .items > thead {
+    display: none;
+  }
+
+  .itemMobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 15px;
+    letter-spacing: -0.25px;
+    color: #0c0e16;
+    margin-bottom: 24px;
+  }
+
+  .itemInfo td {
+    padding-bottom: 0;
+  }
+
+  .itemInfo > div {
+    margin-bottom: 8px;
+  }
+
+  .itemInfo > div:last-child {
+    color: #7e88c3;
   }
 }
