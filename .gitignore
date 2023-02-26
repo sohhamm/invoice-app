@@ -22,3 +22,7 @@ dist-ssr
 *.sw?
 
 
+
+#server files
+
+node_modules/

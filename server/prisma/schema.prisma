@@ -27,8 +27,8 @@ model Invoice {
   updatedAt DateTime @updatedAt
   paymentDue DateTime
   description String @db.VarChar(200)
-  client User @relation(fields: [clientId],references: [id])
-  clientId Int
+  user User @relation(fields: [userId],references: [id])
+  userId Int
   status Boolean @default(false)
   senderAddress Address @relation("SenderAddress",fields: [senderAddressId],references: [id])
   senderAddressId Int 
