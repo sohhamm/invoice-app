@@ -4,6 +4,7 @@ import {
   createInvoiceHandler,
   getAllInvoicesHandler,
   getInvoiceByIdHandler,
+  updateInvoiceByIdHandler,
 } from './invoice.controller'
 
 export default async function invoiceRoutes(server: FastifyInstance) {
@@ -40,5 +41,19 @@ export default async function invoiceRoutes(server: FastifyInstance) {
       },
     },
     getInvoiceByIdHandler,
+  )
+
+  server.put(
+    '/:id',
+    {
+      // @ts-ignore
+      onRequest: [server.authenticate],
+      schema: {
+        params: {
+          id: {type: 'string'},
+        },
+      },
+    },
+    updateInvoiceByIdHandler,
   )
 }

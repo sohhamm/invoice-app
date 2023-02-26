@@ -30,7 +30,6 @@ export const invoiceGenerated = z.object({
 
 // CREATE, UPDATE
 const createInvoiceSchema = z.object({
-  userId: z.number(),
   senderAddress: addressInput,
   clientAddress: addressInput,
   clientName: z.string(),
@@ -41,25 +40,42 @@ const createInvoiceSchema = z.object({
   items: z.array(itemInput).optional(),
 })
 
-// const createInvoiceResponseSchema = z.object({
-//   data: z.object({invoice_id: z.number()}),
-//   status: z.string(),
-//   error: z.boolean(),
-// })
+const updateInvoiceSchema = z.object({
+  id: z.number(),
+  clientName: z.string(),
+  clientEmail: z.string().email('Invalid email provided'),
+  invoiceDate: z.date(),
+  paymentTerms: z.number(),
+  description: z.string(),
+  status: z.string(),
+})
 
-// READ
-// const getInvoiceSchema = z.object({})
+const updateAddressSchema = z.object({
+  street: z.string(),
+  city: z.string(),
+  postCode: z.string(),
+  country: z.string(),
+})
 
-// const getInvoicesSchema = z.array(getInvoiceSchema)
+const updateItemSchema = z.object({
+  id: z.number(),
+  invoiceId: z.number(),
+  itemId: z.number(),
+  quantity: z.number(),
+  item: z.object({
+    name: z.string(),
+    price: z.number(),
+  }),
+})
 
 export type CreateInvoiceInput = z.infer<typeof createInvoiceSchema>
+export type UpdateInvoiceInput = z.infer<typeof updateInvoiceSchema>
+export type UpdateAddressInput = z.infer<typeof updateAddressSchema>
+export type UpdateItemInput = z.infer<typeof updateItemSchema>
 
 export const {schemas: invoiceSchema, $ref} = buildJsonSchemas(
   {
     createInvoiceSchema,
-    // createInvoiceResponseSchema,
-    // getInvoiceSchema,
-    // getInvoicesSchema,
   },
   {$id: 'InvoiceSchema'},
 )

@@ -1,5 +1,6 @@
-import {CreateInvoiceInput} from './invoice.schema'
 import prisma from '../../utils/prisma'
+import {CreateInvoiceInput} from './invoice.schema'
+import type {InvoiceStatus, InvoiceUpdate} from '../../types'
 
 export function createInvoice(data: CreateInvoiceInput & {userId: number}) {
   const items = data.items?.map(item => ({
@@ -26,9 +27,9 @@ export function createInvoice(data: CreateInvoiceInput & {userId: number}) {
   })
 }
 
-export function findAllInvoices(userId: number) {
+export function findAllInvoices(userId: number, status?: InvoiceStatus) {
   return prisma.invoice.findMany({
-    where: {userId},
+    where: {userId, status: status},
     include: {
       clientAddress: true,
       senderAddress: true,
@@ -59,3 +60,75 @@ export function findInvoiceByID(invoiceId: number) {
 // ? edit items: https://www.prisma.io/docs/guides/database/troubleshooting-orm/help-articles/working-with-many-to-many-relations
 
 //  items?: ItemInvoicesCreateNestedManyWithoutInvoiceInput
+
+export async function updateInvoiceByID(invoiceId: number, payload: InvoiceUpdate) {
+  const {invoice, senderAddress, clientAddress, items} = payload
+
+  const data = {
+    invoiceDate: invoice.invoiceDate ?? undefined,
+    paymentTerms: invoice.paymentTerms ?? undefined,
+    description: invoice.description ?? undefined,
+    clientName: invoice.clientName ?? undefined,
+    clientEmail: invoice.clientEmail ?? undefined,
+    // todo enforce this in backend later on
+    status: (invoice.status as InvoiceStatus) ?? undefined,
+    senderAddress: {
+      update: senderAddress,
+    },
+    clientAddress: {
+      update: clientAddress,
+    },
+    // items: {
+    //   upsertMany: updateItemInvoice,
+    // },
+  }
+
+  const updateItemTransactions = items?.map(item =>
+    prisma.itemInvoices.upsert({
+      where: {
+        invoiceId_itemId: {
+          invoiceId: item.invoiceId,
+          // -1 signifies prisma that this record does not exist
+          itemId: item.itemId ?? -1,
+        },
+      },
+      update: {
+        quantity: item.quantity,
+        item: {
+          update: {
+            name: item.item.name,
+            price: item.item.price,
+          },
+        },
+      },
+      create: {
+        invoice: {
+          connect: {
+            id: invoiceId,
+          },
+        },
+        quantity: item.quantity,
+        item: {
+          create: {
+            name: item.item.name,
+            price: item.item.price,
+          },
+        },
+      },
+    }),
+  )
+
+  console.log(updateItemTransactions)
+
+  if (updateItemTransactions.length) {
+    await prisma.$transaction(updateItemTransactions)
+  }
+
+  // todo try updating the items in the same mutation
+  return prisma.invoice.update({
+    where: {
+      id: invoiceId,
+    },
+    data,
+  })
+}

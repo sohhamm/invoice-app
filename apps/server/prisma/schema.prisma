@@ -27,7 +27,6 @@ model Invoice {
   description String @db.VarChar(200)
   user User @relation(fields: [userId],references: [id]) 
   userId Int 
-  status Boolean @default(false)
   senderAddress Address @relation("SenderAddress",fields: [senderAddressId],references: [id],onDelete: Cascade)
   senderAddressId Int
   clientName String
@@ -35,7 +34,9 @@ model Invoice {
   clientAddress Address @relation("ClientAddress",fields: [clientAddressId],references: [id],onDelete: Cascade)
   clientAddressId Int
   items ItemInvoices[] 
+  status Status @default(PENDING)
 }
+
 
 
 model Address {
@@ -69,6 +70,8 @@ model ItemInvoices {
 
 
 
-
-
-
+enum Status {
+  DRAFT @map("draft")
+  PAID @map("paid")
+  PENDING @map("pending")
+}
