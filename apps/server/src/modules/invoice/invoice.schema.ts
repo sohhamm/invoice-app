@@ -12,6 +12,12 @@ const addressInput = z.object({
   country: z.string(),
 })
 
+const itemInput = z.object({
+  name: z.string(),
+  price: z.number(),
+  quantity: z.number(),
+})
+
 // const addressGenerated = z.object({
 //   id: z.number(),
 // })
@@ -32,25 +38,14 @@ const createInvoiceSchema = z.object({
   invoiceDate: z.date(),
   paymentTerms: z.number(),
   description: z.string(),
-  items: z.array(z.string()).optional(),
+  items: z.array(itemInput).optional(),
 })
 
-const createInvoiceResponseSchema = z.object({
-  id: z.number(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  userId: z.number(),
-  senderAddress: addressInput,
-  senderAddressId: z.number(),
-  clientAddress: addressInput,
-  clientAddressId: z.number(),
-  clientName: z.string(),
-  clientEmail: z.string().email('Invalid email provided'),
-  invoiceDate: z.date(),
-  paymentTerms: z.number(),
-  description: z.string(),
-  items: z.array(z.string()).optional(),
-})
+// const createInvoiceResponseSchema = z.object({
+//   data: z.object({invoice_id: z.number()}),
+//   status: z.string(),
+//   error: z.boolean(),
+// })
 
 // READ
 // const getInvoiceSchema = z.object({})
@@ -62,7 +57,7 @@ export type CreateInvoiceInput = z.infer<typeof createInvoiceSchema>
 export const {schemas: invoiceSchema, $ref} = buildJsonSchemas(
   {
     createInvoiceSchema,
-    createInvoiceResponseSchema,
+    // createInvoiceResponseSchema,
     // getInvoiceSchema,
     // getInvoicesSchema,
   },
