@@ -21,8 +21,5 @@ dist-ssr
 *.sln
 *.sw?
 
-
-
-#server files
-
-node_modules/
+.env
+.turbo

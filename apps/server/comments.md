@@ -8,3 +8,8 @@
 - add dotenv
 - use private and public key for jwt, get the keys from
   [here](https://travistidwell.com/jsencrypt/demo/)
+
+## Troubleshooting
+
+- sudo lsof -i -P | grep LISTEN | grep :5432
+- sudo kill -9 PID
