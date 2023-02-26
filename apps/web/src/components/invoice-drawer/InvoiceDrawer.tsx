@@ -63,8 +63,8 @@ export default function InvoiceDrawer({
     formState: {errors, isValid},
     setValue,
   } = useForm<InvoiceFormData>({resolver: yupResolver(invoiceSchema), defaultValues})
-
   const onSubmit = async (data: InvoiceFormData, action: InvoiceFormActionType) => {
+    console.log('HII')
     console.log(data, 'data')
     const payload = data
 

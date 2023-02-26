@@ -25,19 +25,22 @@ model Invoice {
   id Int @id @default(autoincrement()) 
   createdAt DateTime @default(now()) 
   updatedAt DateTime @updatedAt
-  paymentDue DateTime
+  invoiceDate DateTime 
+  // in days, 1, 7, 14, 30
+  paymentTerms Int
   description String @db.VarChar(200)
-  user User @relation(fields: [userId],references: [id])
-  userId Int
+  user User @relation(fields: [userId],references: [id]) 
+  userId Int 
   status Boolean @default(false)
   senderAddress Address @relation("SenderAddress",fields: [senderAddressId],references: [id])
-  senderAddressId Int 
+  senderAddressId Int
+  clientName String
+  clientEmail String
   clientAddress Address @relation("ClientAddress",fields: [clientAddressId],references: [id])
-  clientAddressId Int 
+  clientAddressId Int
   items ItemOnInvoices[]
 }
 
-// todo make the address model better which countries table
 
 model Address {
  id Int @id @default(autoincrement())
@@ -45,7 +48,6 @@ model Address {
  city String
  postCode String
  country String
- type String
  senderAddress Invoice[] @relation("SenderAddress")
  clientAddress Invoice[] @relation("ClientAddress")
 }

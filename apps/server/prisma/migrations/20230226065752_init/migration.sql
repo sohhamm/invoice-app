@@ -15,11 +15,14 @@ CREATE TABLE "Invoice" (
     "id" SERIAL NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "paymentDue" TIMESTAMP(3) NOT NULL,
+    "invoiceDate" TIMESTAMP(3) NOT NULL,
+    "paymentTerms" INTEGER NOT NULL,
     "description" VARCHAR(200) NOT NULL,
-    "clientId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
     "status" BOOLEAN NOT NULL DEFAULT false,
     "senderAddressId" INTEGER NOT NULL,
+    "clientName" TEXT NOT NULL,
+    "clientEmail" TEXT NOT NULL,
     "clientAddressId" INTEGER NOT NULL,
 
     CONSTRAINT "Invoice_pkey" PRIMARY KEY ("id")
@@ -32,7 +35,6 @@ CREATE TABLE "Address" (
     "city" TEXT NOT NULL,
     "postCode" TEXT NOT NULL,
     "country" TEXT NOT NULL,
-    "type" TEXT NOT NULL,
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
 );
@@ -62,7 +64,7 @@ CREATE TABLE "ItemOnInvoices" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
-ALTER TABLE "Invoice" ADD CONSTRAINT "Invoice_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Invoice" ADD CONSTRAINT "Invoice_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Invoice" ADD CONSTRAINT "Invoice_senderAddressId_fkey" FOREIGN KEY ("senderAddressId") REFERENCES "Address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
