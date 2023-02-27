@@ -11,6 +11,8 @@ import {InvoiceFormKey} from './utils'
 import {useMobile} from '@/utils/hooks/use-media-query'
 import {InvoiceFormActionType} from '@/types'
 import type {InvoiceFormData} from '@/types'
+import {Link} from 'react-router-dom'
+import {BackBtn} from '@/pages/invoice-details'
 
 type InvoiceDrawerProps =
   | {
@@ -123,7 +125,12 @@ export default function InvoiceDrawer({
         <Dialog.Overlay className={classes.DialogOverlay} />
 
         <Dialog.Content className={classes.DialogContent}>
-          <Dialog.Title className={classes.DialogTitle}>
+          <Dialog.Title className={classes.dialogTitle}>
+            {isMobile && (
+              <div onClick={() => setOpen(false)}>
+                <BackBtn styles={{marginBottom: '24px', color: '#0C0E16'}} />
+              </div>
+            )}
             {isEdit ? (
               <>
                 Edit <span>#</span>
@@ -144,14 +151,14 @@ export default function InvoiceDrawer({
                 )}
                 htmlFor={InvoiceFormKey.STREET}
               >
-                Street
+                Street Address
               </label>
 
               <p className={classes.error}>{isError(InvoiceFormKey.STREET).msg}</p>
             </div>
             <input
               className={clsx(
-                classes.Input,
+                classes.input,
                 isError(InvoiceFormKey.STREET).error && classes.inputError,
               )}
               id={InvoiceFormKey.STREET}
@@ -174,7 +181,7 @@ export default function InvoiceDrawer({
                 </div>
                 <input
                   className={clsx(
-                    classes.Input,
+                    classes.input,
                     classes.smallInput,
                     isError(InvoiceFormKey.CITY).error && classes.inputError,
                   )}
@@ -198,7 +205,7 @@ export default function InvoiceDrawer({
                 </div>
                 <input
                   className={clsx(
-                    classes.Input,
+                    classes.input,
                     classes.smallInput,
                     isError(InvoiceFormKey.POSTCODE).error && classes.inputError,
                   )}
@@ -207,7 +214,7 @@ export default function InvoiceDrawer({
                 />
               </div>
 
-              <div>
+              <div className={classes.fullWidth}>
                 <div className={classes.labelBox}>
                   <label
                     className={clsx(
@@ -222,9 +229,10 @@ export default function InvoiceDrawer({
                 </div>
                 <input
                   className={clsx(
-                    classes.Input,
+                    classes.input,
                     classes.smallInput,
                     isError(InvoiceFormKey.COUNTRY).error && classes.inputError,
+                    classes.fullWidth,
                   )}
                   id={InvoiceFormKey.COUNTRY}
                   {...register(InvoiceFormKey.COUNTRY)}
@@ -247,7 +255,7 @@ export default function InvoiceDrawer({
             </div>
             <input
               className={clsx(
-                classes.Input,
+                classes.input,
                 isError(InvoiceFormKey.CLIENT_NAME).error && classes.inputError,
               )}
               id={InvoiceFormKey.CLIENT_NAME}
@@ -269,7 +277,7 @@ export default function InvoiceDrawer({
             </div>
             <input
               className={clsx(
-                classes.Input,
+                classes.input,
                 isError(InvoiceFormKey.CLIENT_EMAIL).error && classes.inputError,
               )}
               id={InvoiceFormKey.CLIENT_EMAIL}
@@ -286,13 +294,13 @@ export default function InvoiceDrawer({
                 )}
                 htmlFor={InvoiceFormKey.CLIENT_STREET}
               >
-                Street
+                Street Address
               </label>
               <p className={classes.error}>{isError(InvoiceFormKey.CLIENT_STREET).msg}</p>
             </div>
             <input
               className={clsx(
-                classes.Input,
+                classes.input,
                 isError(InvoiceFormKey.CLIENT_STREET).error && classes.inputError,
               )}
               id={InvoiceFormKey.CLIENT_STREET}
@@ -316,7 +324,7 @@ export default function InvoiceDrawer({
                 </div>
                 <input
                   className={clsx(
-                    classes.Input,
+                    classes.input,
                     classes.smallInput,
                     isError(InvoiceFormKey.CLIENT_CITY).error && classes.inputError,
                   )}
@@ -340,7 +348,7 @@ export default function InvoiceDrawer({
                 </div>
                 <input
                   className={clsx(
-                    classes.Input,
+                    classes.input,
                     classes.smallInput,
                     isError(InvoiceFormKey.CLIENT_POSTCODE).error && classes.inputError,
                   )}
@@ -349,7 +357,7 @@ export default function InvoiceDrawer({
                 />
               </div>
 
-              <div>
+              <div className={classes.fullWidth}>
                 <div className={classes.labelBox}>
                   <label
                     className={clsx(
@@ -364,9 +372,10 @@ export default function InvoiceDrawer({
                 </div>
                 <input
                   className={clsx(
-                    classes.Input,
+                    classes.input,
                     classes.smallInput,
                     isError(InvoiceFormKey.CLIENT_COUNTRY).error && classes.inputError,
+                    classes.fullWidth,
                   )}
                   id={InvoiceFormKey.CLIENT_COUNTRY}
                   {...register(InvoiceFormKey.CLIENT_COUNTRY)}
@@ -375,7 +384,7 @@ export default function InvoiceDrawer({
             </div>
 
             <div className={classes.inlineFlex} style={{marginTop: '24px', marginBottom: '0px'}}>
-              <div>
+              <div className={classes.fullWidth}>
                 <div className={classes.labelBox}>
                   <label
                     className={clsx(
@@ -390,7 +399,7 @@ export default function InvoiceDrawer({
                   <p className={classes.error}>{isError(InvoiceFormKey.CREATED_AT).msg}</p>
                 </div>
                 <input
-                  className={clsx(classes.Input, classes.mdInput)}
+                  className={clsx(classes.input, classes.mdInput, classes.fullWidth)}
                   id={InvoiceFormKey.CREATED_AT}
                   type='date'
                   {...register(InvoiceFormKey.CREATED_AT)}
@@ -398,7 +407,7 @@ export default function InvoiceDrawer({
               </div>
 
               {/* payment terms start */}
-              <div>
+              <div className={classes.fullWidth}>
                 <div className={classes.labelBox}>
                   <label
                     className={clsx(
@@ -412,7 +421,7 @@ export default function InvoiceDrawer({
                   <p className={classes.error}>{isError(InvoiceFormKey.PAYMENT_TERMS).msg}</p>
                 </div>
                 <input
-                  className={clsx(classes.Input, classes.mdInput)}
+                  className={clsx(classes.input, classes.mdInput, classes.fullWidth)}
                   id={InvoiceFormKey.PAYMENT_TERMS}
                   {...register(InvoiceFormKey.PAYMENT_TERMS)}
                 />
@@ -434,7 +443,7 @@ export default function InvoiceDrawer({
               <p className={classes.error}>{isError(InvoiceFormKey.DESCRIPTION).msg}</p>
             </div>
             <input
-              className={classes.Input}
+              className={classes.input}
               id={InvoiceFormKey.DESCRIPTION}
               {...register(InvoiceFormKey.DESCRIPTION)}
               style={{marginBottom: '32px'}}
@@ -454,28 +463,28 @@ export default function InvoiceDrawer({
               {tempItems?.map((item: any, idx: number) => (
                 <div key={item.name + idx.toString()} className={classes.itemBox}>
                   <input
-                    className={classes.Input}
+                    className={classes.input}
                     id='name'
                     // @ts-ignore
                     {...register(`items.${idx}.name`)}
                     style={{marginBottom: 0}}
                   />
                   <input
-                    className={classes.Input}
+                    className={classes.input}
                     id='quantity'
                     // @ts-ignore
                     {...register(`items.${idx}.quantity`)}
                     style={{marginBottom: 0}}
                   />
                   <input
-                    className={classes.Input}
+                    className={classes.input}
                     id='price'
                     // @ts-ignore
                     {...register(`items.${idx}.price`)}
                     style={{marginBottom: 0}}
                   />
                   <input
-                    className={classes.Input}
+                    className={classes.input}
                     id='total'
                     // @ts-ignore
                     {...register(`items.${idx}.total`)}

@@ -28,10 +28,7 @@ export default function InvoiceDetails() {
   return (
     <div className={classes.box}>
       <Link to={INVOICES}>
-        <div className={classes.back}>
-          <HiChevronLeft color='#7C5DFA' size={12} strokeWidth={3} />
-          Go back
-        </div>
+        <BackBtn />
       </Link>
 
       <div className={clsx(classes.header, 'card')}>
@@ -182,6 +179,15 @@ function CTAs({invoice, handleEditInvoice, onDelete, handlePaid}: any) {
       <Button hasAddIcon={false} onClick={handlePaid}>
         Mark as Paid
       </Button>
+    </div>
+  )
+}
+
+export function BackBtn({styles = {}}: {styles?: React.CSSProperties}) {
+  return (
+    <div className={classes.back} style={{...styles}}>
+      <HiChevronLeft color='#7C5DFA' size={12} strokeWidth={3} />
+      Go back
     </div>
   )
 }
