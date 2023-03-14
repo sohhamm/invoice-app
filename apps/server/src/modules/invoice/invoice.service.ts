@@ -28,6 +28,7 @@ export function createInvoice(data: CreateInvoiceInput & {userId: number}) {
 }
 
 export function findAllInvoices(userId: number, status?: InvoiceStatus) {
+  // todo format the response better for items, remove nesting
   return prisma.invoice.findMany({
     where: {userId, status: status},
     include: {
@@ -64,6 +65,12 @@ export function findInvoiceByID(invoiceId: number) {
 export async function updateInvoiceByID(invoiceId: number, payload: InvoiceUpdate) {
   const {invoice, senderAddress, clientAddress, items} = payload
 
+  if (items) {
+    const res = await updateInvoiceItems(invoiceId, items)
+
+    console.log(res)
+  }
+
   const data = {
     invoiceDate: invoice.invoiceDate ?? undefined,
     paymentTerms: invoice.paymentTerms ?? undefined,
@@ -83,6 +90,28 @@ export async function updateInvoiceByID(invoiceId: number, payload: InvoiceUpdat
     // },
   }
 
+  // todo try updating the items in the same mutation
+  return prisma.invoice.update({
+    where: {
+      id: invoiceId,
+    },
+    data,
+  })
+}
+
+type Item = {
+  quantity: number
+  id: number
+  item: {
+    id: number
+    name: string
+    price: number
+  }
+  itemId: number
+  invoiceId: number
+}
+
+async function updateInvoiceItems(invoiceId: number, items: Item[]) {
   const updateItemTransactions = items?.map(item =>
     prisma.itemInvoices.upsert({
       where: {
@@ -98,6 +127,15 @@ export async function updateInvoiceByID(invoiceId: number, payload: InvoiceUpdat
           update: {
             name: item.item.name,
             price: item.item.price,
+          },
+          connectOrCreate: {
+            where: {
+              id: item.item.id,
+            },
+            create: {
+              name: item.item.name,
+              price: item.item.price,
+            },
           },
         },
       },
@@ -118,17 +156,7 @@ export async function updateInvoiceByID(invoiceId: number, payload: InvoiceUpdat
     }),
   )
 
-  console.log(updateItemTransactions)
-
   if (updateItemTransactions.length) {
     await prisma.$transaction(updateItemTransactions)
   }
-
-  // todo try updating the items in the same mutation
-  return prisma.invoice.update({
-    where: {
-      id: invoiceId,
-    },
-    data,
-  })
 }

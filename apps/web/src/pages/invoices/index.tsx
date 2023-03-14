@@ -7,6 +7,7 @@ import classes from './styles.module.css'
 import {useMobile} from '@/utils/hooks/use-media-query'
 import type {IInvoice, Option} from '@/types'
 import invoices from '../../../data.json'
+import {useGetInvoices} from '@/services/invoices/invoice.data'
 // const invoices: any = []
 
 export default function Invoices() {
@@ -16,7 +17,10 @@ export default function Invoices() {
     paid: false,
   })
   const {isMobile} = useMobile()
-  const fetchingInvoices = false
+
+  const {invoices: _in, fetchingInvoices} = useGetInvoices()
+
+  // console.log(_in)
 
   const handleNewInvoice = (payload: any) => {}
   const handleDraftInvoice = (payload: any) => {}

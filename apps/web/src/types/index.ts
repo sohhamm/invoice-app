@@ -46,3 +46,5 @@ export enum InvoiceFormActionType {
   DRAFT = 'draft',
   // DISCARD = 'discard',
 }
+
+export type InvoiceStatus = 'DRAFT' | 'PAID' | 'PENDING'

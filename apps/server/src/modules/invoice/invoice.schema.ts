@@ -63,6 +63,7 @@ const updateItemSchema = z.object({
   itemId: z.number(),
   quantity: z.number(),
   item: z.object({
+    id: z.number(),
     name: z.string(),
     price: z.number(),
   }),

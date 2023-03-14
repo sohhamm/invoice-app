@@ -1,5 +1,6 @@
 import fastify, {FastifyReply, FastifyRequest} from 'fastify'
 import jwt from '@fastify/jwt'
+import cors from '@fastify/cors'
 import userRoutes from './modules/user/user.route'
 import invoiceRoutes from './modules/invoice/invoice.route'
 import {userSchemas} from './modules/user/user.schema'
@@ -7,6 +8,10 @@ import {invoiceSchema} from './modules/invoice/invoice.schema'
 
 export function buildServer() {
   const server = fastify()
+  // change this later and make it more strict
+  server.register(cors, {
+    origin: '*',
+  })
 
   server.register(jwt, {secret: 'supersecret'})
 
