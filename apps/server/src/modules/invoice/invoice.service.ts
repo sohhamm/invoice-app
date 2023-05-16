@@ -66,9 +66,13 @@ export async function updateInvoiceByID(invoiceId: number, payload: InvoiceUpdat
   const {invoice, senderAddress, clientAddress, items} = payload
 
   if (items) {
-    const res = await updateInvoiceItems(invoiceId, items)
-
-    console.log(res)
+    if (items.length > 0) {
+      const res = await updateInvoiceItems(invoiceId, items)
+      console.log(res)
+    } else {
+      const res = await deleteInvoiceItems(invoiceId)
+      console.log(res)
+    }
   }
 
   const data = {
@@ -101,17 +105,18 @@ export async function updateInvoiceByID(invoiceId: number, payload: InvoiceUpdat
 
 type Item = {
   quantity: number
-  id: number
   item: {
-    id: number
+    id?: number
     name: string
     price: number
   }
-  itemId: number
+  itemId?: number
   invoiceId: number
 }
 
 async function updateInvoiceItems(invoiceId: number, items: Item[]) {
+  console.log(items, 'test')
+
   const updateItemTransactions = items?.map(item =>
     prisma.itemInvoices.upsert({
       where: {
@@ -132,6 +137,7 @@ async function updateInvoiceItems(invoiceId: number, items: Item[]) {
             where: {
               id: item.item.id,
             },
+
             create: {
               name: item.item.name,
               price: item.item.price,
@@ -159,4 +165,12 @@ async function updateInvoiceItems(invoiceId: number, items: Item[]) {
   if (updateItemTransactions.length) {
     await prisma.$transaction(updateItemTransactions)
   }
+}
+
+async function deleteInvoiceItems(invoiceId: number) {
+  return prisma.itemInvoices.deleteMany({
+    where: {
+      invoiceId,
+    },
+  })
 }

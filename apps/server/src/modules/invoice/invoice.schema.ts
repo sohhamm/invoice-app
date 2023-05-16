@@ -58,12 +58,11 @@ const updateAddressSchema = z.object({
 })
 
 const updateItemSchema = z.object({
-  id: z.number(),
   invoiceId: z.number(),
-  itemId: z.number(),
+  itemId: z.number().optional(),
   quantity: z.number(),
   item: z.object({
-    id: z.number(),
+    id: z.number().optional(),
     name: z.string(),
     price: z.number(),
   }),
