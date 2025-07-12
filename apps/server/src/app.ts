@@ -8,12 +8,7 @@ import { errorHandler, notFoundHandler } from '@/middleware/error';
 import { globalRateLimit } from '@/middleware/rateLimit';
 import { requestIdMiddleware } from '@/middleware/requestId';
 import authRoutes from '@/routes/auth.routes';
-import budgetRoutes from '@/routes/budget.routes';
 import invoiceRoutes from '@/routes/invoice.routes';
-import overviewRoutes from '@/routes/overview.routes';
-import potRoutes from '@/routes/pot.routes';
-import recurringBillRoutes from '@/routes/recurringBill.routes';
-import transactionRoutes from '@/routes/transaction.routes';
 import { env } from '@/utils/env';
 import { Logger } from '@/utils/logger';
 
@@ -62,11 +57,6 @@ app.get('/health', async (_, res) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
-app.use('/api/transactions', transactionRoutes);
-app.use('/api/budgets', budgetRoutes);
-app.use('/api/pots', potRoutes);
-app.use('/api/recurring-bills', recurringBillRoutes);
-app.use('/api/overview', overviewRoutes);
 app.use('/api/invoices', invoiceRoutes);
 
 app.use(notFoundHandler);

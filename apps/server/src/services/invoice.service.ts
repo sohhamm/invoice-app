@@ -1,45 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-
-interface InvoiceAddress {
-  street: string;
-  city: string;
-  postCode: string;
-  country: string;
-}
-
-interface InvoiceItem {
-  name: string;
-  quantity: number;
-  price: number;
-  total: number;
-}
-
-interface Invoice {
-  id: string;
-  createdAt: string;
-  paymentDue: string;
-  description: string;
-  paymentTerms: number;
-  clientName: string;
-  clientEmail: string;
-  status: 'draft' | 'pending' | 'paid';
-  senderAddress: InvoiceAddress;
-  clientAddress: InvoiceAddress;
-  items: InvoiceItem[];
-  total: number;
-}
-
-interface CreateInvoiceInput {
-  description?: string;
-  paymentTerms?: number;
-  clientName?: string;
-  clientEmail?: string;
-  senderAddress?: InvoiceAddress;
-  clientAddress?: InvoiceAddress;
-  items?: Omit<InvoiceItem, 'total'>[];
-  status?: 'draft' | 'pending';
-}
+import type { Invoice, CreateInvoiceInput, InvoiceItem } from '@personal-finance-app/shared-types';
 
 // In-memory storage for invoices (in production, this would be a database)
 let invoices: Invoice[] = [];

@@ -6,24 +6,97 @@ import DeleteConfirm from '@/components/delete-confirm'
 import Button from '@/components/ui/button'
 import classes from './styles.module.css'
 import {format} from 'date-fns'
-import {Link, useParams} from 'react-router-dom'
+import {Link, useParams, useNavigate} from 'react-router-dom'
 import {HiChevronLeft} from 'react-icons/hi2'
 import {INVOICES, currencyFormatter} from '@/utils'
 import {useMobile} from '@/utils/hooks/use-media-query'
-import d from '../../../data.json'
+import {useGetInvoiceById, useMarkInvoiceAsPaid, useDeleteInvoice, useUpdateInvoice} from '@/services/invoices/invoice.data'
 
 export default function InvoiceDetails() {
   const {id} = useParams()
-
+  const navigate = useNavigate()
   const {isMobile} = useMobile()
 
-  const invoice: any = d.find(i => i.id === id)
+  const {invoice, fetchingInvoice, invoiceError} = useGetInvoiceById(id || '')
+  const markAsPaidMutation = useMarkInvoiceAsPaid()
+  const deleteInvoiceMutation = useDeleteInvoice()
+  const updateInvoiceMutation = useUpdateInvoice()
 
-  const onDelete = () => {}
+  const onDelete = () => {
+    if (id) {
+      deleteInvoiceMutation.mutate(id, {
+        onSuccess: () => {
+          navigate(INVOICES)
+        }
+      })
+    }
+  }
 
-  const handlePaid = () => {}
+  const handlePaid = () => {
+    if (id && invoice?.status !== 'paid') {
+      markAsPaidMutation.mutate(id)
+    }
+  }
 
-  const handleEditInvoice = (payload: any) => {}
+  const transformFormToPayload = (formData: any) => {
+    return {
+      description: formData.description,
+      paymentTerms: Number(formData.paymentTerms),
+      clientName: formData.clientName,
+      clientEmail: formData.clientEmail,
+      senderAddress: {
+        street: formData.street,
+        city: formData.city,
+        postCode: formData.postCode,
+        country: formData.country,
+      },
+      clientAddress: {
+        street: formData.clientStreet,
+        city: formData.clientCity,
+        postCode: formData.clientPostCode,
+        country: formData.clientCountry,
+      },
+      items: formData.items.map((item: any) => ({
+        name: item.name,
+        quantity: Number(item.quantity),
+        price: Number(item.price),
+      })),
+    }
+  }
+
+  const handleEditInvoice = async (formData: any) => {
+    if (id) {
+      const payload = transformFormToPayload(formData)
+      updateInvoiceMutation.mutate({ id, data: payload })
+    }
+  }
+
+  if (fetchingInvoice) {
+    return (
+      <div className={classes.box}>
+        <Link to={INVOICES}>
+          <BackBtn />
+        </Link>
+        <div className={classes.emptyBox}>
+          <p>Loading invoice...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (invoiceError || !invoice) {
+    return (
+      <div className={classes.box}>
+        <Link to={INVOICES}>
+          <BackBtn />
+        </Link>
+        <div className={classes.emptyBox}>
+          <h2>Invoice not found</h2>
+          <p>The invoice you're looking for doesn't exist or has been deleted.</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className={classes.box}>
@@ -176,9 +249,11 @@ function CTAs({invoice, handleEditInvoice, onDelete, handlePaid}: any) {
     <div className={classes.cta}>
       <InvoiceDrawer invoice={invoice} handleEditInvoice={handleEditInvoice} isEdit={true} />
       <DeleteConfirm onDelete={onDelete} invoiceId={invoice.id} />
-      <Button hasAddIcon={false} onClick={handlePaid}>
-        Mark as Paid
-      </Button>
+      {invoice.status !== 'paid' && (
+        <Button hasAddIcon={false} onClick={handlePaid}>
+          Mark as Paid
+        </Button>
+      )}
     </div>
   )
 }

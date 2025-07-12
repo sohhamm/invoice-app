@@ -3,9 +3,8 @@ import {StorageService} from '@/services/storage'
 import type {InternalAxiosRequestConfig} from 'axios'
 
 export const apiAxios = axios.create({
-  baseURL: import.meta.env.VITE_API,
-  // baseURL: 'http://0.0.0.0:8000/api/',
-  timeout: 1000,
+  baseURL: import.meta.env.VITE_API || 'http://localhost:3000/api',
+  timeout: 10000,
 })
 
 apiAxios.defaults.headers.common['Content-Type'] = 'application/json'

@@ -1,46 +1,29 @@
-import type { User } from './user';
-
-/**
- * Login request payload
- */
-export interface LoginRequest {
+export interface User {
+  id: string;
+  name: string;
   email: string;
-  password: string;
+  password_hash?: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
-/**
- * Signup request payload
- */
 export interface SignupRequest {
   name: string;
   email: string;
   password: string;
 }
 
-/**
- * Authentication response
- */
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
 export interface AuthResponse {
   user: Omit<User, 'password_hash'>;
   token: string;
   expiresIn: string;
 }
 
-/**
- * Frontend auth state (stored in localStorage/zustand)
- */
-export interface AuthState {
-  token: string | null;
-  user: Omit<User, 'password_hash'> | null;
-  isAuthenticated: boolean;
-}
-
-/**
- * JWT payload structure
- */
-export interface JwtPayload {
-  userId: string;
-  email: string;
-  iat?: number;
-  exp?: number;
+export interface AuthenticatedRequest {
+  user?: User;
 }
