@@ -2,7 +2,7 @@ import {create} from 'zustand'
 import {persist, createJSONStorage} from 'zustand/middleware'
 import {apiAxios} from '@/configs/axios'
 import {StorageService} from '@/services/storage'
-import type {User, LoginRequest, SignupRequest, AuthResponse} from '@/types/auth'
+import type {User, LoginRequest, SignupRequest} from '@/types/auth'
 
 interface AuthState {
   user: User | null
@@ -43,16 +43,12 @@ export const useAuthStore = create<AuthStore>()(
         if (get().isInitialized) return
 
         try {
-          const token = StorageService.getAccessToken()
-          const storedUser = StorageService.get('user')
+          const {token, user} = get()
 
-          if (!token || !storedUser) {
+          if (!token || !user) {
             set({...initialState, isInitialized: true})
             return
           }
-
-          // Parse stored user
-          const user = JSON.parse(storedUser)
 
           // Validate token with backend
           try {
@@ -69,7 +65,6 @@ export const useAuthStore = create<AuthStore>()(
             })
           } catch (error) {
             // Token is invalid, clean up
-            StorageService.clear()
             set({...initialState, isInitialized: true})
           }
         } catch (error) {
@@ -82,12 +77,10 @@ export const useAuthStore = create<AuthStore>()(
         try {
           set({isLoading: true, error: null})
 
-          const response = await apiAxios.post<AuthResponse>('/auth/login', credentials)
-          const {user, token} = response.data
+          const response = await apiAxios.post('/auth/login', credentials)
+          const {user, token} = response.data.data
 
-          // Store authentication data
-          StorageService.setAccessToken(token)
-          StorageService.set('user', JSON.stringify(user))
+          // Data will be automatically persisted by Zustand persist middleware
 
           set({
             user,
@@ -112,12 +105,10 @@ export const useAuthStore = create<AuthStore>()(
         try {
           set({isLoading: true, error: null})
 
-          const response = await apiAxios.post<AuthResponse>('/auth/signup', userData)
-          const {user, token} = response.data
+          const response = await apiAxios.post('/auth/signup', userData)
+          const {user, token} = response.data.data
 
-          // Store authentication data
-          StorageService.setAccessToken(token)
-          StorageService.set('user', JSON.stringify(user))
+          // Data will be automatically persisted by Zustand persist middleware
 
           set({
             user,
@@ -139,10 +130,7 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       logout: () => {
-        // Clear all stored data
-        StorageService.clear()
-
-        // Reset store to initial state
+        // Reset store to initial state (persist middleware will clear storage)
         set({...initialState, isInitialized: true})
 
         // Redirect to login (will be handled by ProtectedRoute)
@@ -153,17 +141,17 @@ export const useAuthStore = create<AuthStore>()(
       },
 
       updateUser: (user: User) => {
-        StorageService.set('user', JSON.stringify(user))
         set({user})
       },
     }),
     {
-      name: 'auth-store',
-      storage: createJSONStorage(() => sessionStorage),
+      name: '__invoice-app__.auth-store',
+      storage: createJSONStorage(() => localStorage),
       partialize: state => ({
         user: state.user,
         token: state.token,
         isAuthenticated: state.isAuthenticated,
+        isInitialized: state.isInitialized,
       }),
     },
   ),

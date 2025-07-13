@@ -49,7 +49,7 @@ export default function Sidebar() {
         <div className={classes.avatarContainer}>
           {user ? (
             <Avatar
-              name={user.name}
+              name={user.name || user.email || 'User'}
               size="md"
               onClick={() => setShowLogoutMenu(!showLogoutMenu)}
               className={classes.avatar}

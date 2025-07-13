@@ -10,7 +10,9 @@ interface AvatarProps {
 
 export default function Avatar({ name, size = 'md', onClick, className }: AvatarProps) {
   const getInitials = (fullName: string): string => {
-    const names = fullName.trim().split(' ')
+    if (!fullName || fullName.trim() === '') return '??'
+    const names = fullName.trim().split(' ').filter(n => n.length > 0)
+    if (names.length === 0) return '??'
     if (names.length === 1) {
       return names[0].charAt(0).toUpperCase()
     }
@@ -19,6 +21,10 @@ export default function Avatar({ name, size = 'md', onClick, className }: Avatar
 
   const getColorFromName = (name: string): string => {
     // Generate consistent color based on name
+    if (!name || name.trim() === '') {
+      return '#888eb0' // Default muted blue for empty names
+    }
+    
     let hash = 0
     for (let i = 0; i < name.length; i++) {
       hash = name.charCodeAt(i) + ((hash << 5) - hash)
