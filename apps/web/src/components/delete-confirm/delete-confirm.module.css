@@ -3,16 +3,17 @@ button {
   all: unset;
 }
 
-.AlertDialogOverlay {
+.dialogOverlay {
   background-color: hsla(0, 0%, 0%, 0.439);
   position: fixed;
   inset: 0;
+  z-index: 50;
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.AlertDialogContent {
+.dialogContent {
   background-color: white;
-  border-radius: 6px;
+  border-radius: 8px;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   position: fixed;
   top: 50%;
@@ -23,13 +24,18 @@ button {
   max-height: 85vh;
   padding: 48px;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  border-radius: 8px;
+  z-index: 51;
 }
-.AlertDialogContent:focus {
+
+.dialogContent:focus {
   outline: none;
 }
 
-.AlertDialogTitle {
+.dialogHeader {
+  margin-bottom: 24px;
+}
+
+.dialogTitle {
   margin: 0;
   font-weight: 700;
   font-size: 1.5rem;
@@ -39,7 +45,8 @@ button {
   margin-bottom: 13px;
 }
 
-.AlertDialogDescription {
+.dialogDescription {
+  margin: 0;
   margin-bottom: 16px;
   font-weight: 500;
   font-size: 0.75rem;
@@ -54,12 +61,38 @@ button {
   column-gap: 8px;
 }
 
+/* Ariakit dialog animations */
+.dialogContent[data-enter] {
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialogContent[data-leave] {
+  animation: contentHide 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialogOverlay[data-enter] {
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialogOverlay[data-leave] {
+  animation: overlayHide 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes overlayHide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 
@@ -71,5 +104,28 @@ button {
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
+  }
+}
+
+@media (max-width: 600px) {
+  .dialogContent {
+    width: 95vw;
+    padding: 32px 24px;
+  }
+  
+  .footer {
+    flex-direction: column;
+    row-gap: 8px;
   }
 }

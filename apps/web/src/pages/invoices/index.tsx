@@ -5,9 +5,8 @@ import InvoiceDrawer from '@/components/invoice-drawer'
 import empty from '@/assets/empty-invoice.svg'
 import classes from './styles.module.css'
 import {useMobile} from '@/utils/hooks/use-media-query'
-import type {IInvoice, Option} from '@/types'
-import invoices from '../../../data.json'
-// const invoices: any = []
+import type {IInvoice, Option, InvoiceStatus} from '@/types'
+import {useGetInvoices, useCreateInvoice} from '@/services/invoices/invoice.data'
 
 export default function Invoices() {
   const [opts, setOpts] = React.useState<Option>({
@@ -16,17 +15,79 @@ export default function Invoices() {
     paid: false,
   })
   const {isMobile} = useMobile()
-  const fetchingInvoices = false
 
-  const handleNewInvoice = (payload: any) => {}
-  const handleDraftInvoice = (payload: any) => {}
+  // Get the appropriate status filter based on selected options
+  const getStatusFilter = (): InvoiceStatus | undefined => {
+    const activeOptions = Object.entries(opts)
+      .filter(([_, value]) => value)
+      .map(([key]) => key)
+    if (activeOptions.length === 1) {
+      return activeOptions[0] as InvoiceStatus
+    }
+    return undefined // Return all if multiple or none selected
+  }
+
+  const statusFilter = getStatusFilter()
+  const {invoices, fetchingInvoices} = useGetInvoices(statusFilter)
+  const createInvoiceMutation = useCreateInvoice()
+
+  // Filter invoices based on multiple selections when no single status filter applies
+  const filteredInvoices = React.useMemo(() => {
+    if (statusFilter) return invoices
+
+    if (!opts.draft && !opts.pending && !opts.paid) return invoices
+
+    return invoices.filter(invoice => {
+      if (opts.draft && invoice.status === 'draft') return true
+      if (opts.pending && invoice.status === 'pending') return true
+      if (opts.paid && invoice.status === 'paid') return true
+      return false
+    })
+  }, [invoices, opts, statusFilter])
+
+  const transformFormToPayload = (formData: any, isDraft: boolean) => {
+    return {
+      description: formData.description,
+      paymentTerms: Number(formData.paymentTerms),
+      clientName: formData.clientName,
+      clientEmail: formData.clientEmail,
+      senderAddress: {
+        street: formData.street,
+        city: formData.city,
+        postCode: formData.postCode,
+        country: formData.country,
+      },
+      clientAddress: {
+        street: formData.clientStreet,
+        city: formData.clientCity,
+        postCode: formData.clientPostCode,
+        country: formData.clientCountry,
+      },
+      items: formData.items.map((item: any) => ({
+        name: item.name,
+        quantity: Number(item.quantity),
+        price: Number(item.price),
+      })),
+      isDraft,
+    }
+  }
+
+  const handleNewInvoice = async (formData: any) => {
+    const payload = transformFormToPayload(formData, false)
+    createInvoiceMutation.mutate(payload)
+  }
+
+  const handleDraftInvoice = async (formData: any) => {
+    const payload = transformFormToPayload(formData, true)
+    createInvoiceMutation.mutate(payload)
+  }
 
   return (
     <div>
       <div className={classes.header}>
         <div>
           <h1>Invoices</h1>
-          <p>{getFilteredText(invoices, opts)}</p>
+          <p>{getFilteredText(filteredInvoices, opts, fetchingInvoices)}</p>
         </div>
 
         <div className={classes.ctaBox}>
@@ -40,7 +101,11 @@ export default function Invoices() {
       </div>
 
       <div className={classes.body}>
-        {!fetchingInvoices && !invoices.length ? (
+        {fetchingInvoices ? (
+          <div className={classes.emptyBox}>
+            <p>Loading invoices...</p>
+          </div>
+        ) : !filteredInvoices.length ? (
           <div className={classes.emptyBox}>
             <img src={empty} alt='Empty' />
 
@@ -52,15 +117,18 @@ export default function Invoices() {
             </p>
           </div>
         ) : (
-          invoices.map((invoice: IInvoice) => <Invoice key={invoice.id} invoice={invoice} />)
+          filteredInvoices.map((invoice: IInvoice) => (
+            <Invoice key={invoice.id} invoice={invoice} />
+          ))
         )}
       </div>
     </div>
   )
 }
 
-const getFilteredText = (data: any, opts: Option) => {
+const getFilteredText = (data: any, opts: Option, isLoading: boolean) => {
   if (!data) return ''
+  if (isLoading) return 'Loading invoices...'
   if (data.length === 0) return 'No invoices'
 
   if (!opts.draft && !opts.pending && !opts.paid) return `There are ${data.length} total invoices`

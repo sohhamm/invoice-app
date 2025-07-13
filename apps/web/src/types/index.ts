@@ -17,7 +17,7 @@ export interface IInvoice {
   paymentTerms: number
   clientName: string
   clientEmail: string
-  status: string
+  status: 'draft' | 'pending' | 'paid'
   senderAddress: IAddress
   clientAddress: IAddress
   items: IItem[]
@@ -46,3 +46,5 @@ export enum InvoiceFormActionType {
   DRAFT = 'draft',
   // DISCARD = 'discard',
 }
+
+export type InvoiceStatus = 'draft' | 'pending' | 'paid'

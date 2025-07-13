@@ -2,28 +2,89 @@
   --size-md: 964px;
   --size-sm: 450px;
 
-  --bg: hsl(0, 0%, 100%);
+  /* Light theme colors */
+  --bg: #f8f8fb;
+  --text-primary: #0c0e16;
+  --text-secondary: #888eb0;
+  --text-muted: #7e88c3;
+  
+  /* Card and surface colors */
+  --inv-bg: #ffffff;
+  --surface-secondary: #f9fafe;
+  
+  /* Button colors */
+  --btn-primary-bg: #7c5dfa;
+  --btn-primary-color: #ffffff;
+  --btn-primary-hover: #9277ff;
+  
   --btn-edit-bg: #f9fafe;
   --btn-edit-color: #7e88c3;
-  --btn-edit-bg-hover: #dfe3fa;
-
+  --btn-edit-hover: #dfe3fa;
+  
   --btn-draft-bg: #373b53;
   --btn-draft-color: #888eb0;
-  --btn-draft-bg-hover: #0c0e16;
-
-  /* invoice card variables */
-  --inv-bg: white;
+  --btn-draft-hover: #0c0e16;
+  
+  --btn-delete-bg: #ec5757;
+  --btn-delete-color: #ffffff;
+  --btn-delete-hover: #ff9797;
+  
+  /* Form elements */
+  --input-bg: #ffffff;
+  --input-border: #dfe3fa;
+  --input-border-focus: #9277ff;
+  --input-text: #0c0e16;
+  
+  /* Status colors */
+  --status-paid-bg: #33d69f;
+  --status-paid-color: #ffffff;
+  --status-pending-bg: #ff8f00;
+  --status-pending-color: #ffffff;
+  --status-draft-bg: #373b53;
+  --status-draft-color: #dfe3fa;
 }
 
 [data-theme='dark'] {
-  --bg: #231f20;
+  /* Dark theme colors */
+  --bg: #141625;
+  --text-primary: #ffffff;
+  --text-secondary: #dfe3fa;
+  --text-muted: #888eb0;
+  
+  /* Card and surface colors */
+  --inv-bg: #1e2139;
+  --surface-secondary: #252945;
+  
+  /* Button colors - maintaining same primary */
+  --btn-primary-bg: #7c5dfa;
+  --btn-primary-color: #ffffff;
+  --btn-primary-hover: #9277ff;
+  
   --btn-edit-bg: #252945;
   --btn-edit-color: #dfe3fa;
-  --btn-edit-bg-hover: hsl(0, 0%, 100%);
-
+  --btn-edit-hover: #ffffff;
+  
+  --btn-draft-bg: #252945;
   --btn-draft-color: #dfe3fa;
-
-  --inv-bg: #1e2139;
+  --btn-draft-hover: #1e2139;
+  
+  --btn-delete-bg: #ec5757;
+  --btn-delete-color: #ffffff;
+  --btn-delete-hover: #ff9797;
+  
+  /* Form elements */
+  --input-bg: #1e2139;
+  --input-border: #252945;
+  --input-border-focus: #7c5dfa;
+  --input-text: #ffffff;
+  
+  /* Status colors - keeping same backgrounds for consistency */
+  --status-paid-bg: #33d69f;
+  --status-paid-color: #ffffff;
+  --status-pending-bg: #ff8f00;
+  --status-pending-color: #ffffff;
+  --status-draft-bg: #dfe3fa;
+  --status-draft-color: #1e2139;
 }
 
 /*

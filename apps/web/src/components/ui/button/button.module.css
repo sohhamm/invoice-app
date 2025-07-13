@@ -1,12 +1,12 @@
 .btn {
-  background: #7c5dfa;
+  background: var(--btn-primary-bg);
   border-radius: 24px;
   width: 150px;
   height: 48px;
   font-weight: 700;
   font-size: 0.75rem;
   letter-spacing: -0.25px;
-  color: #ffffff;
+  color: var(--btn-primary-color);
   border: none;
   display: flex;
   align-items: center;
@@ -15,7 +15,7 @@
 }
 
 .btn:hover {
-  background-color: #9277ff;
+  background-color: var(--btn-primary-hover);
   cursor: pointer;
 }
 
@@ -31,12 +31,11 @@
 .btnEdit {
   width: 73px;
   background: var(--btn-edit-bg);
-
   color: var(--btn-edit-color);
 }
 
 .btnEdit:hover {
-  background: var(--btn-edit-bg-hover);
+  background: var(--btn-edit-hover);
 }
 
 .btnDraft {
@@ -46,28 +45,26 @@
 }
 
 .btnDraft:hover {
-  background: var(--btn-draft-bg-hover);
+  background: var(--btn-draft-hover);
 }
 
 .btnDel {
   width: 89px;
-  background: #ec5757;
-
-  color: white;
+  background: var(--btn-delete-bg);
+  color: var(--btn-delete-color);
 }
 
 .btnDel:hover {
-  background-color: #ff9797;
+  background-color: var(--btn-delete-hover);
 }
 
 .btnLg {
   min-width: 350px;
   width: 100%;
-
-  background-color: #f9fafe;
-  color: #7e88c3;
+  background-color: var(--surface-secondary);
+  color: var(--text-muted);
 }
 
 .btnLg:hover {
-  background-color: #dfe3fa;
+  background-color: var(--btn-edit-hover);
 }

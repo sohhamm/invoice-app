@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { Dialog, DialogDisclosure, useDialogStore } from '@ariakit/react'
 import clsx from 'clsx'
 import Button from '../ui/button'
 import classes from './delete-confirm.module.css'
@@ -11,41 +11,49 @@ export default function DeleteConfirm({
   onDelete: () => void
   invoiceId: string | number
 }) {
+  const dialog = useDialogStore()
+
   const handleDelete = () => {
     onDelete()
+    dialog.hide() // Close dialog after deletion
   }
+
+  const handleCancel = () => {
+    dialog.hide() // Close dialog on cancel
+  }
+
   return (
-    <AlertDialog.Root>
-      <AlertDialog.Trigger asChild>
-        <div>
-          <Button variant='delete'>Delete</Button>
-        </div>
-      </AlertDialog.Trigger>
-      <AlertDialog.Portal>
-        <AlertDialog.Overlay className={classes.AlertDialogOverlay} />
-        <AlertDialog.Content className={classes.AlertDialogContent}>
-          <AlertDialog.Title className={classes.AlertDialogTitle}>
+    <>
+      <DialogDisclosure store={dialog}>
+        <Button variant='delete'>Delete</Button>
+      </DialogDisclosure>
+
+      <Dialog store={dialog} className={classes.dialogContent}>
+        <div className={classes.dialogHeader}>
+          <h2 className={classes.dialogTitle}>
             Confirm Deletion
-          </AlertDialog.Title>
-          <AlertDialog.Description className={classes.AlertDialogDescription}>
+          </h2>
+          <p className={classes.dialogDescription}>
             Are you sure you want to delete invoice #{invoiceId}? This action cannot be undone.
-          </AlertDialog.Description>
-          <div className={classes.footer}>
-            <AlertDialog.Cancel asChild>
-              <div>
-                <Button variant='edit' overrideStyles={{width: '91px'}}>
-                  Cancel
-                </Button>
-              </div>
-            </AlertDialog.Cancel>
-            <AlertDialog.Action asChild>
-              <div onClick={handleDelete}>
-                <Button variant='delete'>Delete</Button>
-              </div>
-            </AlertDialog.Action>
-          </div>
-        </AlertDialog.Content>
-      </AlertDialog.Portal>
-    </AlertDialog.Root>
+          </p>
+        </div>
+        
+        <div className={classes.footer}>
+          <Button 
+            variant='edit' 
+            overrideStyles={{width: '91px'}}
+            onClick={handleCancel}
+          >
+            Cancel
+          </Button>
+          <Button 
+            variant='delete'
+            onClick={handleDelete}
+          >
+            Delete
+          </Button>
+        </div>
+      </Dialog>
+    </>
   )
 }

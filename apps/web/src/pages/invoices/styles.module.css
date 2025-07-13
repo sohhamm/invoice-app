@@ -9,7 +9,7 @@
   font-weight: 700;
   font-size: 2rem;
   letter-spacing: -1px;
-  color: #0c0e16;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
@@ -17,7 +17,7 @@
   font-weight: 500;
   font-size: 0.75rem;
   letter-spacing: -0.25px;
-  color: #888eb0;
+  color: var(--text-secondary);
 }
 
 .ctaBox {
@@ -52,7 +52,7 @@
   font-size: 1.25rem;
   line-height: 22px;
   letter-spacing: -0.625px;
-  color: #0c0e16;
+  color: var(--text-primary);
 }
 
 .emptyBox > p {
@@ -60,7 +60,7 @@
   font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
-  color: #888eb0;
+  color: var(--text-secondary);
 }
 
 .emptyBox > p > span {

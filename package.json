@@ -2,14 +2,21 @@
   "name": "invoice-app",
   "version": "1.0.0",
   "description": "",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
-  "packageManager": "pnpm@7.21.1",
+  "packageManager": "bun@1.2.18",
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "turbo": "^2.5.4"
+  }
 }
