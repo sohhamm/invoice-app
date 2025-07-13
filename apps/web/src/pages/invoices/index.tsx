@@ -18,7 +18,9 @@ export default function Invoices() {
 
   // Get the appropriate status filter based on selected options
   const getStatusFilter = (): InvoiceStatus | undefined => {
-    const activeOptions = Object.entries(opts).filter(([_, value]) => value).map(([key]) => key)
+    const activeOptions = Object.entries(opts)
+      .filter(([_, value]) => value)
+      .map(([key]) => key)
     if (activeOptions.length === 1) {
       return activeOptions[0] as InvoiceStatus
     }
@@ -31,10 +33,10 @@ export default function Invoices() {
 
   // Filter invoices based on multiple selections when no single status filter applies
   const filteredInvoices = React.useMemo(() => {
-    if (statusFilter) return invoices // Already filtered by API
-    
-    if (!opts.draft && !opts.pending && !opts.paid) return invoices // Show all
-    
+    if (statusFilter) return invoices
+
+    if (!opts.draft && !opts.pending && !opts.paid) return invoices
+
     return invoices.filter(invoice => {
       if (opts.draft && invoice.status === 'draft') return true
       if (opts.pending && invoice.status === 'pending') return true
@@ -74,7 +76,7 @@ export default function Invoices() {
     const payload = transformFormToPayload(formData, false)
     createInvoiceMutation.mutate(payload)
   }
-  
+
   const handleDraftInvoice = async (formData: any) => {
     const payload = transformFormToPayload(formData, true)
     createInvoiceMutation.mutate(payload)
@@ -85,7 +87,7 @@ export default function Invoices() {
       <div className={classes.header}>
         <div>
           <h1>Invoices</h1>
-          <p>{getFilteredText(filteredInvoices, opts)}</p>
+          <p>{getFilteredText(filteredInvoices, opts, fetchingInvoices)}</p>
         </div>
 
         <div className={classes.ctaBox}>
@@ -115,15 +117,18 @@ export default function Invoices() {
             </p>
           </div>
         ) : (
-          filteredInvoices.map((invoice: IInvoice) => <Invoice key={invoice.id} invoice={invoice} />)
+          filteredInvoices.map((invoice: IInvoice) => (
+            <Invoice key={invoice.id} invoice={invoice} />
+          ))
         )}
       </div>
     </div>
   )
 }
 
-const getFilteredText = (data: any, opts: Option) => {
+const getFilteredText = (data: any, opts: Option, isLoading: boolean) => {
   if (!data) return ''
+  if (isLoading) return 'Loading invoices...'
   if (data.length === 0) return 'No invoices'
 
   if (!opts.draft && !opts.pending && !opts.paid) return `There are ${data.length} total invoices`

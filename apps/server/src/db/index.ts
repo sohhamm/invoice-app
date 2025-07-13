@@ -47,66 +47,88 @@ export interface User {
   name: string;
   email: string;
   password_hash: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface Transaction {
-  id: string;
-  user_id: string;
-  recipient_sender: string;
-  category: string;
-  transaction_date: Date;
-  amount: string;
-  transaction_type: 'income' | 'expense';
-  recurring: boolean;
-  avatar?: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface Budget {
-  id: string;
-  user_id: string;
-  category: string;
-  maximum: string;
-  theme: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface Pot {
-  id: string;
-  user_id: string;
-  name: string;
-  target: string;
-  total: string;
-  theme: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface RecurringBill {
-  id: string;
-  user_id: string;
-  name: string;
-  amount: string;
-  due_day: number;
-  category: string;
-  avatar?: string;
+  role: 'user' | 'admin';
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
 }
 
-export interface RecurringBillPayment {
+export interface Invoice {
   id: string;
-  recurring_bill_id: string;
-  transaction_id?: string;
-  due_date: Date;
-  paid_date?: Date;
-  amount: string;
-  status: 'pending' | 'paid' | 'overdue';
+  user_id: string;
+  invoice_number: string;
+  client_name: string;
+  client_email: string;
+  client_address?: string;
+  client_phone?: string;
+  invoice_date: string;
+  due_date: string;
+  payment_terms: 'net_15' | 'net_30' | 'net_45' | 'net_60' | 'due_on_receipt';
+  status: 'draft' | 'sent' | 'paid' | 'overdue' | 'cancelled';
+  subtotal: number;
+  tax_rate?: number;
+  tax_amount?: number;
+  discount_rate?: number;
+  discount_amount?: number;
+  total_amount: number;
+  paid_amount?: number;
+  notes?: string;
+  terms_conditions?: string;
+  sent_at?: Date;
+  paid_at?: Date;
   created_at: Date;
   updated_at: Date;
+}
+
+export interface InvoiceItem {
+  id: string;
+  invoice_id: string;
+  description: string;
+  quantity: number;
+  unit_price: number;
+  line_total: number;
+  sort_order?: number;
+  created_at: Date;
+  updated_at: Date;
+}
+
+// Frontend-compatible types (matching data.json structure)
+export interface Address {
+  street: string;
+  city: string;
+  postCode: string;
+  country: string;
+}
+
+export interface FrontendInvoiceItem {
+  name: string;
+  quantity: number;
+  price: number;
+  total: number;
+}
+
+export interface FrontendInvoice {
+  id: string;
+  createdAt: string;
+  paymentDue: string;
+  description: string;
+  paymentTerms: number;
+  clientName: string;
+  clientEmail: string;
+  status: 'draft' | 'pending' | 'paid';
+  senderAddress: Address;
+  clientAddress: Address;
+  items: FrontendInvoiceItem[];
+  total: number;
+}
+
+export interface CreateInvoiceInput {
+  description?: string;
+  paymentTerms?: number;
+  clientName?: string;
+  clientEmail?: string;
+  status?: 'draft' | 'pending' | 'paid';
+  senderAddress?: Address;
+  clientAddress?: Address;
+  items?: FrontendInvoiceItem[];
 }

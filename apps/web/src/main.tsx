@@ -8,6 +8,7 @@ import Layout from '@/components/layout/Layout'
 import {createRoot} from 'react-dom/client'
 import {BrowserRouter} from 'react-router-dom'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+import { useUserPreferences } from '@/stores/user-preferences'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,14 +21,26 @@ const queryClient = new QueryClient({
   },
 })
 
+function ThemeInitializer({ children }: { children: React.ReactNode }) {
+  const { theme } = useUserPreferences()
+  
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+  
+  return <>{children}</>
+}
+
 function Root() {
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <Layout>
-            <App />
-          </Layout>
+          <ThemeInitializer>
+            <Layout>
+              <App />
+            </Layout>
+          </ThemeInitializer>
         </BrowserRouter>
       </QueryClientProvider>
     </React.StrictMode>

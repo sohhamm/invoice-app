@@ -1,13 +1,14 @@
-.DialogOverlay {
+.dialogOverlay {
   background-color: hsla(0, 0%, 0%, 0.439);
   position: fixed;
   inset: 0;
   left: 103px;
+  z-index: 50;
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.DialogContent {
-  background-color: white;
+.dialogContent {
+  background-color: var(--inv-bg);
   border-radius: 0px 20px 20px 0px;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   position: fixed;
@@ -20,9 +21,10 @@
   padding: 56px;
   padding-bottom: 0;
   overflow-y: scroll;
+  z-index: 51;
 }
 
-.DialogContent:focus {
+.dialogContent:focus {
   outline: none;
 }
 
@@ -31,12 +33,12 @@
   font-weight: 700;
   font-size: 1.5rem;
   letter-spacing: -0.5px;
-  color: #0c0e16;
+  color: var(--text-primary);
   margin-bottom: 48px;
 }
 
 .dialogTitle > span {
-  color: #888eb0;
+  color: var(--text-secondary);
 }
 
 .labelBox {
@@ -50,7 +52,7 @@
   font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
-  color: #7e88c3;
+  color: var(--text-muted);
   display: block;
 }
 
@@ -65,9 +67,10 @@
   font-size: 0.75rem;
   line-height: 15px;
   letter-spacing: -0.25px;
-  color: #0c0e16;
+  color: var(--input-text);
+  background-color: var(--input-bg);
 
-  border: 1px solid #dfe3fa;
+  border: 1px solid var(--input-border);
   border-radius: 4px;
   height: 48px;
 
@@ -75,7 +78,7 @@
 }
 .input:focus,
 .input:focus-visible {
-  border: 1px solid #9277ff;
+  border: 1px solid var(--input-border-focus);
   outline: none;
 }
 
@@ -99,12 +102,60 @@
   margin-top: 32px;
 }
 
+/* Ariakit dialog animations */
+.dialogContent[data-enter] {
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialogContent[data-leave] {
+  animation: contentHide 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialogOverlay[data-enter] {
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dialogOverlay[data-leave] {
+  animation: overlayHide 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 @keyframes overlayShow {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes overlayHide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100%);
   }
 }
 
@@ -137,7 +188,7 @@
   position: sticky;
   bottom: 0;
   height: 110px;
-  background-color: white;
+  background-color: var(--inv-bg);
   margin-left: -56px;
   margin-right: -56px;
   padding: 0 56px;
@@ -193,12 +244,12 @@
 }
 
 @media (max-width: 964px) {
-  .DialogOverlay {
+  .dialogOverlay {
     left: 0;
     top: 80px;
   }
 
-  .DialogContent {
+  .dialogContent {
     top: 80px;
     left: 0;
     width: 100%;
@@ -206,11 +257,11 @@
 }
 
 @media (max-width: 600px) {
-  .DialogOverlay {
+  .dialogOverlay {
     top: 72px;
   }
 
-  .DialogContent {
+  .dialogContent {
     top: 72px;
     border-radius: 0px;
 

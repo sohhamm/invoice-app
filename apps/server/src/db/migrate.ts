@@ -12,154 +12,93 @@ const migrations = [
         name VARCHAR(255) NOT NULL,
         email VARCHAR(255) NOT NULL UNIQUE,
         password_hash TEXT NOT NULL,
+        role VARCHAR(50) DEFAULT 'user' NOT NULL CHECK (role IN ('user', 'admin')),
+        is_active BOOLEAN DEFAULT true NOT NULL,
         created_at TIMESTAMP DEFAULT NOW() NOT NULL,
         updated_at TIMESTAMP DEFAULT NOW() NOT NULL
       );
       
-      CREATE INDEX IF NOT EXISTS email_idx ON users(email);
+      CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+      CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+      CREATE INDEX IF NOT EXISTS idx_users_active ON users(is_active);
     `,
   },
   {
-    id: '002_create_transactions_table',
+    id: '002_create_invoices_table',
     sql: `
       DO $$ BEGIN
-        CREATE TYPE transaction_type AS ENUM ('income', 'expense');
+        CREATE TYPE invoice_status AS ENUM ('draft', 'sent', 'paid', 'overdue', 'cancelled');
+      EXCEPTION
+        WHEN duplicate_object THEN null;
+      END $$;
+
+      DO $$ BEGIN
+        CREATE TYPE payment_terms AS ENUM ('net_15', 'net_30', 'net_45', 'net_60', 'due_on_receipt');
       EXCEPTION
         WHEN duplicate_object THEN null;
       END $$;
       
-      DO $$ BEGIN
-        CREATE TYPE category AS ENUM (
-          'Entertainment',
-          'Bills',
-          'Groceries',
-          'Dining Out',
-          'Transportation',
-          'Personal Care',
-          'Education',
-          'Lifestyle',
-          'Shopping',
-          'General'
-        );
-      EXCEPTION
-        WHEN duplicate_object THEN null;
-      END $$;
-      
-      CREATE TABLE IF NOT EXISTS transactions (
+      CREATE TABLE IF NOT EXISTS invoices (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
         user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        recipient_sender VARCHAR(255) NOT NULL,
-        category category NOT NULL,
-        transaction_date TIMESTAMP NOT NULL,
-        amount DECIMAL(10, 2) NOT NULL,
-        transaction_type transaction_type NOT NULL,
-        recurring BOOLEAN DEFAULT FALSE NOT NULL,
-        avatar VARCHAR(500),
+        invoice_number VARCHAR(100) NOT NULL UNIQUE,
+        client_name VARCHAR(255) NOT NULL,
+        client_email VARCHAR(255) NOT NULL,
+        client_address TEXT,
+        client_phone VARCHAR(50),
+        invoice_date DATE NOT NULL DEFAULT CURRENT_DATE,
+        due_date DATE NOT NULL,
+        payment_terms payment_terms NOT NULL DEFAULT 'net_30',
+        status invoice_status NOT NULL DEFAULT 'draft',
+        subtotal DECIMAL(12, 2) NOT NULL DEFAULT 0,
+        tax_rate DECIMAL(5, 2) DEFAULT 0,
+        tax_amount DECIMAL(12, 2) DEFAULT 0,
+        discount_rate DECIMAL(5, 2) DEFAULT 0,
+        discount_amount DECIMAL(12, 2) DEFAULT 0,
+        total_amount DECIMAL(12, 2) NOT NULL DEFAULT 0,
+        paid_amount DECIMAL(12, 2) DEFAULT 0,
+        notes TEXT,
+        terms_conditions TEXT,
+        sent_at TIMESTAMP,
+        paid_at TIMESTAMP,
         created_at TIMESTAMP DEFAULT NOW() NOT NULL,
         updated_at TIMESTAMP DEFAULT NOW() NOT NULL
       );
       
-      CREATE INDEX IF NOT EXISTS user_id_idx ON transactions(user_id);
-      CREATE INDEX IF NOT EXISTS category_idx ON transactions(category);
-      CREATE INDEX IF NOT EXISTS transaction_date_idx ON transactions(transaction_date);
-      CREATE INDEX IF NOT EXISTS transaction_type_idx ON transactions(transaction_type);
-      CREATE INDEX IF NOT EXISTS recurring_idx ON transactions(recurring);
+      CREATE INDEX IF NOT EXISTS idx_invoices_user_id ON invoices(user_id);
+      CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status);
+      CREATE INDEX IF NOT EXISTS idx_invoices_due_date ON invoices(due_date);
+      CREATE INDEX IF NOT EXISTS idx_invoices_client_email ON invoices(client_email);
+      CREATE INDEX IF NOT EXISTS idx_invoices_invoice_date ON invoices(invoice_date);
+      CREATE INDEX IF NOT EXISTS idx_invoices_number ON invoices(invoice_number);
     `,
   },
   {
-    id: '003_create_budgets_table',
+    id: '003_create_invoice_items_table',
     sql: `
-      CREATE TABLE IF NOT EXISTS budgets (
+      CREATE TABLE IF NOT EXISTS invoice_items (
         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        category category NOT NULL,
-        maximum DECIMAL(10, 2) NOT NULL,
-        theme VARCHAR(7) NOT NULL,
+        invoice_id UUID NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
+        description TEXT NOT NULL,
+        quantity DECIMAL(10, 2) NOT NULL DEFAULT 1,
+        unit_price DECIMAL(10, 2) NOT NULL,
+        line_total DECIMAL(12, 2) NOT NULL,
+        sort_order INTEGER DEFAULT 0,
         created_at TIMESTAMP DEFAULT NOW() NOT NULL,
         updated_at TIMESTAMP DEFAULT NOW() NOT NULL
       );
       
-      CREATE INDEX IF NOT EXISTS budget_user_id_idx ON budgets(user_id);
-      CREATE INDEX IF NOT EXISTS budget_category_idx ON budgets(category);
-      CREATE UNIQUE INDEX IF NOT EXISTS unique_user_category_idx ON budgets(user_id, category);
+      CREATE INDEX IF NOT EXISTS idx_invoice_items_invoice_id ON invoice_items(invoice_id);
+      CREATE INDEX IF NOT EXISTS idx_invoice_items_sort_order ON invoice_items(sort_order);
     `,
   },
   {
-    id: '004_create_pots_table',
-    sql: `
-      CREATE TABLE IF NOT EXISTS pots (
-        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        name VARCHAR(255) NOT NULL,
-        target DECIMAL(10, 2) NOT NULL,
-        total DECIMAL(10, 2) DEFAULT 0 NOT NULL,
-        theme VARCHAR(7) NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
-        updated_at TIMESTAMP DEFAULT NOW() NOT NULL
-      );
-      
-      CREATE INDEX IF NOT EXISTS pot_user_id_idx ON pots(user_id);
-      CREATE INDEX IF NOT EXISTS pot_name_idx ON pots(name);
-    `,
-  },
-  {
-    id: '005_create_migrations_table',
+    id: '004_create_migrations_table',
     sql: `
       CREATE TABLE IF NOT EXISTS migrations (
         id VARCHAR(255) PRIMARY KEY,
         executed_at TIMESTAMP DEFAULT NOW() NOT NULL
       );
-    `,
-  },
-  {
-    id: '006_create_recurring_bills',
-    sql: `
-      CREATE TABLE IF NOT EXISTS recurring_bills (
-        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-        user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-        name VARCHAR(255) NOT NULL,
-        amount DECIMAL(10, 2) NOT NULL,
-        due_day INTEGER NOT NULL CHECK (due_day >= 1 AND due_day <= 31),
-        category category NOT NULL,
-        avatar VARCHAR(500),
-        is_active BOOLEAN DEFAULT true NOT NULL,
-        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
-        updated_at TIMESTAMP DEFAULT NOW() NOT NULL
-      );
-
-      CREATE TABLE IF NOT EXISTS recurring_bill_payments (
-        id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-        recurring_bill_id UUID NOT NULL REFERENCES recurring_bills(id) ON DELETE CASCADE,
-        transaction_id UUID REFERENCES transactions(id) ON DELETE SET NULL,
-        due_date DATE NOT NULL,
-        paid_date TIMESTAMP,
-        amount DECIMAL(10, 2) NOT NULL,
-        status VARCHAR(20) DEFAULT 'pending' NOT NULL CHECK (status IN ('pending', 'paid', 'overdue')),
-        created_at TIMESTAMP DEFAULT NOW() NOT NULL,
-        updated_at TIMESTAMP DEFAULT NOW() NOT NULL
-      );
-
-      CREATE INDEX IF NOT EXISTS recurring_bills_user_id_idx ON recurring_bills(user_id);
-      CREATE INDEX IF NOT EXISTS recurring_bills_name_idx ON recurring_bills(name);
-      CREATE INDEX IF NOT EXISTS recurring_bills_due_day_idx ON recurring_bills(due_day);
-      CREATE INDEX IF NOT EXISTS recurring_bill_payments_bill_id_idx ON recurring_bill_payments(recurring_bill_id);
-      CREATE INDEX IF NOT EXISTS recurring_bill_payments_due_date_idx ON recurring_bill_payments(due_date);
-      CREATE INDEX IF NOT EXISTS recurring_bill_payments_status_idx ON recurring_bill_payments(status);
-      CREATE UNIQUE INDEX IF NOT EXISTS unique_bill_due_date_idx ON recurring_bill_payments(recurring_bill_id, due_date);
-    `,
-  },
-  {
-    id: '007_add_performance_indexes',
-    sql: `
-      -- Additional performance indexes
-      CREATE INDEX IF NOT EXISTS idx_users_created_at ON users(created_at);
-      CREATE INDEX IF NOT EXISTS idx_transactions_user_date ON transactions(user_id, transaction_date DESC);
-      CREATE INDEX IF NOT EXISTS idx_transactions_user_category ON transactions(user_id, category);
-      CREATE INDEX IF NOT EXISTS idx_transactions_recipient_sender ON transactions(recipient_sender);
-      CREATE INDEX IF NOT EXISTS idx_budgets_user_category ON budgets(user_id, category);
-      CREATE INDEX IF NOT EXISTS idx_recurring_bills_active ON recurring_bills(is_active);
-      CREATE INDEX IF NOT EXISTS idx_recurring_bills_user_active ON recurring_bills(user_id, is_active);
-      CREATE INDEX IF NOT EXISTS idx_recurring_bill_payments_transaction_id ON recurring_bill_payments(transaction_id);
     `,
   },
 ];

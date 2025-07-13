@@ -29,17 +29,17 @@
 }
 
 .id {
-  color: #0c0e16;
+  color: var(--text-primary);
   min-width: 60px;
 }
 
 .id > span {
-  color: #7e88c3;
+  color: var(--text-muted);
 }
 
 .due,
 .client {
-  color: #888eb0;
+  color: var(--text-secondary);
   font-weight: 500;
   min-width: 110px;
 }
@@ -47,7 +47,7 @@
 .price {
   font-size: 1rem;
   letter-spacing: -0.8px;
-  color: #0c0e16;
+  color: var(--text-primary);
 }
 
 .flexer {

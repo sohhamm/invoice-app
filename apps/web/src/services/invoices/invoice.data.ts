@@ -1,19 +1,18 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { InvoiceService, CreateInvoicePayload, UpdateInvoicePayload } from './invoice.service'
-import { InvoiceStatus, IInvoice } from '@/types'
+import {useQuery, useMutation, useQueryClient} from '@tanstack/react-query'
+import {InvoiceService, CreateInvoicePayload, UpdateInvoicePayload} from './invoice.service'
+import {InvoiceStatus, IInvoice} from '@/types'
 
 const svc = new InvoiceService()
 
 export const QUERY_KEYS = {
   invoices: ['invoices'] as const,
   invoice: (id: string) => ['invoices', id] as const,
-  invoicesByStatus: (status?: InvoiceStatus) => ['invoices', { status }] as const,
+  invoicesByStatus: (status?: InvoiceStatus) => ['invoices', {status}] as const,
 }
 
-// Query hooks
 export const useGetInvoices = (status?: InvoiceStatus) => {
   const queryKey = status ? QUERY_KEYS.invoicesByStatus(status) : QUERY_KEYS.invoices
-  
+
   const query = useQuery({
     queryKey,
     queryFn: () => svc.getAllInvoices(status),
@@ -25,7 +24,6 @@ export const useGetInvoices = (status?: InvoiceStatus) => {
     fetchingInvoices: query.isLoading,
     invoicesError: query.error,
     refetchInvoices: query.refetch,
-    ...query,
   }
 }
 
@@ -34,7 +32,7 @@ export const useGetInvoiceById = (id: string, enabled: boolean = true) => {
     queryKey: QUERY_KEYS.invoice(id),
     queryFn: () => svc.getInvoiceById(id),
     enabled: enabled && !!id,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   })
 
   return {
@@ -46,7 +44,6 @@ export const useGetInvoiceById = (id: string, enabled: boolean = true) => {
   }
 }
 
-// Mutation hooks
 export const useCreateInvoice = () => {
   const queryClient = useQueryClient()
 
@@ -54,8 +51,8 @@ export const useCreateInvoice = () => {
     mutationFn: (data: CreateInvoicePayload) => svc.createInvoice(data),
     onSuccess: (newInvoice: IInvoice) => {
       // Invalidate and refetch invoices
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.invoices })
-      
+      queryClient.invalidateQueries({queryKey: QUERY_KEYS.invoices})
+
       // Add the new invoice to the cache
       queryClient.setQueryData(QUERY_KEYS.invoice(newInvoice.id), newInvoice)
     },
@@ -66,14 +63,14 @@ export const useUpdateInvoice = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateInvoicePayload }) => 
+    mutationFn: ({id, data}: {id: string; data: UpdateInvoicePayload}) =>
       svc.updateInvoice(id, data),
     onSuccess: (updatedInvoice: IInvoice) => {
       // Update the specific invoice in the cache
       queryClient.setQueryData(QUERY_KEYS.invoice(updatedInvoice.id), updatedInvoice)
-      
+
       // Invalidate the invoices list to refetch
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.invoices })
+      queryClient.invalidateQueries({queryKey: QUERY_KEYS.invoices})
     },
   })
 }
@@ -86,9 +83,9 @@ export const useMarkInvoiceAsPaid = () => {
     onSuccess: (updatedInvoice: IInvoice) => {
       // Update the specific invoice in the cache
       queryClient.setQueryData(QUERY_KEYS.invoice(updatedInvoice.id), updatedInvoice)
-      
+
       // Invalidate the invoices list to refetch
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.invoices })
+      queryClient.invalidateQueries({queryKey: QUERY_KEYS.invoices})
     },
   })
 }
@@ -100,10 +97,10 @@ export const useDeleteInvoice = () => {
     mutationFn: (id: string) => svc.deleteInvoice(id),
     onSuccess: (_, deletedId: string) => {
       // Remove the invoice from the cache
-      queryClient.removeQueries({ queryKey: QUERY_KEYS.invoice(deletedId) })
-      
+      queryClient.removeQueries({queryKey: QUERY_KEYS.invoice(deletedId)})
+
       // Invalidate the invoices list to refetch
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.invoices })
+      queryClient.invalidateQueries({queryKey: QUERY_KEYS.invoices})
     },
   })
 }
@@ -116,24 +113,22 @@ export const useOptimisticStatusUpdate = () => {
     // Optimistically update the cache
     queryClient.setQueryData(QUERY_KEYS.invoice(id), (oldData: IInvoice | undefined) => {
       if (!oldData) return oldData
-      return { ...oldData, status: newStatus }
+      return {...oldData, status: newStatus}
     })
 
     // Also update in the invoices list
     queryClient.setQueryData(QUERY_KEYS.invoices, (oldData: IInvoice[] | undefined) => {
       if (!oldData) return oldData
-      return oldData.map(invoice => 
-        invoice.id === id ? { ...invoice, status: newStatus } : invoice
-      )
+      return oldData.map(invoice => (invoice.id === id ? {...invoice, status: newStatus} : invoice))
     })
   }
 
-  return { updateInvoiceStatus }
+  return {updateInvoiceStatus}
 }
 
 // Custom hook for invoice statistics
 export const useInvoiceStats = () => {
-  const { invoices, fetchingInvoices } = useGetInvoices()
+  const {invoices, fetchingInvoices} = useGetInvoices()
 
   const stats = {
     total: invoices.length,

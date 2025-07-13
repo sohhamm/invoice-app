@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as invoiceService from '@/services/invoice.service';
 import { Logger } from '@/utils/logger';
 import { ResponseUtils } from '@/utils/response';
-import type { CreateInvoiceInput } from '@personal-finance-app/shared-types';
+import type { CreateInvoiceInput } from '@/db/index';
 
 export async function createInvoiceHandler(req: Request, res: Response) {
   try {

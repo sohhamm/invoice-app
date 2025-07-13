@@ -4,17 +4,10 @@ import sun from '@/assets/icon-sun.svg'
 import moon from '@/assets/icon-moon.svg'
 import avatar from '@/assets/image-avatar.jpg'
 import classes from './sidebar.module.css'
+import { useUserPreferences } from '@/stores/user-preferences'
 
 export default function Sidebar() {
-  const [mode, setMode] = React.useState('light')
-
-  const handleToggleMode = (type: 'dark' | 'light') => {
-    if (type === 'dark') {
-      setMode('dark')
-    } else {
-      setMode('light')
-    }
-  }
+  const { theme, toggleTheme } = useUserPreferences()
 
   return (
     <div className={classes.box}>
@@ -25,19 +18,19 @@ export default function Sidebar() {
 
       <div className={classes.bottomBox}>
         <div className={classes.toggle}>
-          {mode === 'dark' ? (
+          {theme === 'dark' ? (
             <img
               src={sun}
               alt='sun icon'
               className={classes.toggleIcon}
-              onClick={() => handleToggleMode('light')}
+              onClick={toggleTheme}
             />
           ) : (
             <img
               src={moon}
               alt='moon icon'
               className={classes.toggleIcon}
-              onClick={() => handleToggleMode('dark')}
+              onClick={toggleTheme}
             />
           )}
         </div>

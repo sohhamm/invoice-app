@@ -15,16 +15,16 @@
 }
 
 .tagDraft {
-  background: #f4f4f5;
-  color: #383b51;
+  background: var(--status-draft-bg);
+  color: var(--status-draft-color);
 }
 
 .tagPending {
-  background: #fef9f1;
-  color: #f09536;
+  background: var(--status-pending-bg);
+  color: var(--status-pending-color);
 }
 
 .tagPaid {
-  background: #f5fdfa;
-  color: #6bd3a3;
+  background: var(--status-paid-bg);
+  color: var(--status-paid-color);
 }
