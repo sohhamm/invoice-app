@@ -28,7 +28,7 @@
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.8.1",
     "yup": "v0.32.11",
-    "zustand": "^4.3.3"
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "^18.14.1",

@@ -1,0 +1,68 @@
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  font-weight: 600;
+  color: white;
+}
+
+.avatar:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.initials {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+/* Size variants */
+.sm {
+  width: 32px;
+  height: 32px;
+  font-size: 0.75rem;
+}
+
+.md {
+  width: 40px;
+  height: 40px;
+  font-size: 0.875rem;
+}
+
+.lg {
+  width: 48px;
+  height: 48px;
+  font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 964px) {
+  .md {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+  }
+
+  .md:hover {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 600px) {
+  .md {
+    width: 28px;
+    height: 28px;
+    font-size: 0.7rem;
+  }
+
+  .md:hover {
+    width: 30px;
+    height: 30px;
+  }
+}

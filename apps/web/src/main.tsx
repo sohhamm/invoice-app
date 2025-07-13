@@ -6,7 +6,7 @@ import * as React from 'react'
 import App from './App'
 import Layout from '@/components/layout/Layout'
 import {createRoot} from 'react-dom/client'
-import {BrowserRouter} from 'react-router-dom'
+import {BrowserRouter, useLocation} from 'react-router-dom'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import { useUserPreferences } from '@/stores/user-preferences'
 
@@ -31,15 +31,26 @@ function ThemeInitializer({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+function ConditionalLayout({ children }: { children: React.ReactNode }) {
+  const location = useLocation()
+  const isAuthRoute = location.pathname.startsWith('/auth')
+  
+  if (isAuthRoute) {
+    return <>{children}</>
+  }
+  
+  return <Layout>{children}</Layout>
+}
+
 function Root() {
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <ThemeInitializer>
-            <Layout>
+            <ConditionalLayout>
               <App />
-            </Layout>
+            </ConditionalLayout>
           </ThemeInitializer>
         </BrowserRouter>
       </QueryClientProvider>
