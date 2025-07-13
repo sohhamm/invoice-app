@@ -1,6 +1,10 @@
 import {useQuery, useMutation, useQueryClient} from '@tanstack/react-query'
-import {InvoiceService, CreateInvoicePayload, UpdateInvoicePayload} from './invoice.service'
-import {InvoiceStatus, IInvoice} from '@/types'
+import {
+  InvoiceService,
+  type CreateInvoicePayload,
+  type UpdateInvoicePayload,
+} from './invoice.service'
+import type {InvoiceStatus, IInvoice} from '@/types'
 
 const svc = new InvoiceService()
 

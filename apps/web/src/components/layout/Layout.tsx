@@ -3,11 +3,11 @@ import Sidebar from './sidebar/Sidebar'
 import classes from './layout.module.css'
 
 interface LayoutProps {
-  children: JSX.Element
+  children: React.ReactNode
 }
 
 const ReactQueryDevtoolsProduction = React.lazy(() =>
-  import('@tanstack/react-query-devtools/build/lib/index.prod.js').then(d => ({
+  import('@tanstack/react-query-devtools/production').then(d => ({
     default: d.ReactQueryDevtools,
   })),
 )
@@ -27,7 +27,7 @@ export default function Layout({children}: LayoutProps) {
 
       {showDevtools && (
         <React.Suspense fallback={null}>
-          <ReactQueryDevtoolsProduction position='bottom-right' />
+          <ReactQueryDevtoolsProduction initialIsOpen={false} />
         </React.Suspense>
       )}
     </div>

@@ -5,8 +5,9 @@ import '@fontsource/spartan/700.css'
 import * as React from 'react'
 import App from './App'
 import Layout from '@/components/layout/Layout'
+import AuthProvider from '@/components/auth/AuthProvider'
 import {createRoot} from 'react-dom/client'
-import {BrowserRouter, useLocation} from 'react-router-dom'
+import {BrowserRouter, useLocation} from 'react-router'
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import { useUserPreferences } from '@/stores/user-preferences'
 
@@ -47,11 +48,13 @@ function Root() {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <ThemeInitializer>
-            <ConditionalLayout>
-              <App />
-            </ConditionalLayout>
-          </ThemeInitializer>
+          <AuthProvider>
+            <ThemeInitializer>
+              <ConditionalLayout>
+                <App />
+              </ConditionalLayout>
+            </ThemeInitializer>
+          </AuthProvider>
         </BrowserRouter>
       </QueryClientProvider>
     </React.StrictMode>

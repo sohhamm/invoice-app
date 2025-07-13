@@ -1,40 +1,45 @@
 import React, { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router'
 import Button from '@/components/ui/button/Button'
 import { AuthCard } from '@/components/auth'
-import { useAuthStore } from '@/stores/auth'
-import type { LoginRequest } from '../../../../../packages/shared-types/src'
+import { useAuthActions, useAuthError } from '@/stores/auth'
+import type { LoginRequest } from '@/types/auth'
 import classes from '../../../components/auth/auth-card.module.css'
 
 export default function Login() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { login, isLoading, error, clearError } = useAuthStore()
+  const { login, clearError } = useAuthActions()
+  const error = useAuthError()
+  const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState<LoginRequest>({
     email: '',
     password: ''
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev: LoginRequest) => ({
+    setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }))
+    
+    // Clear error when user types
     if (error) clearError()
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsLoading(true)
 
     try {
       await login(formData)
       
-      // Redirect to previous page or home
-      const redirectTo = (location.state as any)?.from?.pathname || '/'
-      navigate(redirectTo, { replace: true })
+      // Navigate to the intended destination or home
+      const from = (location.state as any)?.from?.pathname || '/'
+      navigate(from, { replace: true })
     } catch (err) {
       // Error is handled by the store
-      console.error('Login failed:', err)
+      setIsLoading(false)
     }
   }
 
@@ -45,7 +50,7 @@ export default function Login() {
     >
       <form onSubmit={handleSubmit} className={classes.form}>
         {error && (
-          <div className={classes.error}>
+          <div className={classes.error} role="alert">
             {error}
           </div>
         )}
@@ -62,7 +67,9 @@ export default function Login() {
             onChange={handleChange}
             className={classes.input}
             placeholder="Enter your email"
+            autoComplete="email"
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -78,7 +85,9 @@ export default function Login() {
             onChange={handleChange}
             className={classes.input}
             placeholder="Enter your password"
+            autoComplete="current-password"
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -87,6 +96,7 @@ export default function Login() {
             type="submit"
             variant="default"
             overrideStyles={{ width: '100%' }}
+            disabled={isLoading}
           >
             {isLoading ? 'Signing In...' : 'Sign In'}
           </Button>
@@ -100,6 +110,7 @@ export default function Login() {
             type="button"
             onClick={() => navigate('/auth/signup')}
             className={classes.link}
+            disabled={isLoading}
           >
             Sign up
           </button>
@@ -108,6 +119,7 @@ export default function Login() {
           type="button"
           onClick={() => navigate('/auth/forgot-password')}
           className={classes.link}
+          disabled={isLoading}
         >
           Forgot password?
         </button>

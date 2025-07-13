@@ -4,7 +4,7 @@ import Login from '@/pages/auth/login'
 import Signup from '@/pages/auth/signup'
 import ForgotPassword from '@/pages/auth/forgot-password'
 import { ProtectedRoute, PublicRoute } from '@/components/auth'
-import {Route, Routes} from 'react-router-dom'
+import {Route, Routes} from 'react-router'
 
 export default function App() {
   return (

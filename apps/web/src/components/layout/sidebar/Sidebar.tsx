@@ -1,16 +1,17 @@
 import * as React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import logo from '@/assets/logo.svg'
 import sun from '@/assets/icon-sun.svg'
 import moon from '@/assets/icon-moon.svg'
 import { Avatar } from '@/components/ui/avatar'
 import classes from './sidebar.module.css'
 import { useUserPreferences } from '@/stores/user-preferences'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthActions, useCurrentUser } from '@/stores/auth'
 
 export default function Sidebar() {
   const { theme, toggleTheme } = useUserPreferences()
-  const { logout, user } = useAuthStore()
+  const { logout } = useAuthActions()
+  const user = useCurrentUser()
   const navigate = useNavigate()
   const [showLogoutMenu, setShowLogoutMenu] = React.useState(false)
 

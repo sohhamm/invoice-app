@@ -28,7 +28,7 @@ export default function DeleteConfirm({
         <Button variant='delete'>Delete</Button>
       </DialogDisclosure>
 
-      <Dialog store={dialog} className={classes.dialogContent} backdrop={classes.dialogOverlay}>
+      <Dialog store={dialog} className={classes.dialogContent}>
         <div className={classes.dialogHeader}>
           <h2 className={classes.dialogTitle}>
             Confirm Deletion

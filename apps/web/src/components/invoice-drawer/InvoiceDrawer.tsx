@@ -11,7 +11,7 @@ import {InvoiceFormKey} from './utils'
 import {useMobile} from '@/utils/hooks/use-media-query'
 import {InvoiceFormActionType} from '@/types'
 import type {InvoiceFormData} from '@/types'
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router'
 import {BackBtn} from '@/pages/invoice-details'
 
 type InvoiceDrawerProps =

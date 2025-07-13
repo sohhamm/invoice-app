@@ -1,31 +1,37 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import Button from '@/components/ui/button/Button'
 import { AuthCard } from '@/components/auth'
-import { useAuthStore } from '@/stores/auth'
-import type { SignupRequest } from '../../../../../packages/shared-types/src'
+import { useAuthActions, useAuthError } from '@/stores/auth'
+import type { SignupRequest } from '@/types/auth'
 import classes from '../../../components/auth/auth-card.module.css'
+
+interface SignupFormData extends SignupRequest {
+  confirmPassword: string
+}
 
 export default function Signup() {
   const navigate = useNavigate()
-  const { signup, isLoading, error, clearError } = useAuthStore()
-  const [formData, setFormData] = useState<SignupRequest>({
+  const { signup, clearError } = useAuthActions()
+  const error = useAuthError()
+  const [isLoading, setIsLoading] = useState(false)
+  const [validationError, setValidationError] = useState<string | null>(null)
+  const [formData, setFormData] = useState<SignupFormData>({
     name: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   })
-  const [confirmPassword, setConfirmPassword] = useState('')
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name === 'confirmPassword') {
-      setConfirmPassword(e.target.value)
-    } else {
-      setFormData((prev: SignupRequest) => ({
-        ...prev,
-        [e.target.name]: e.target.value
-      }))
-    }
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+    
+    // Clear errors when user types
     if (error) clearError()
+    if (validationError) setValidationError(null)
   }
 
   const validatePassword = (password: string): string | null => {
@@ -46,28 +52,37 @@ export default function Signup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setValidationError(null)
 
     // Validate passwords match
-    if (formData.password !== confirmPassword) {
-      // Use a temporary error for validation
+    if (formData.password !== formData.confirmPassword) {
+      setValidationError('Passwords do not match')
       return
     }
 
     // Validate password strength
     const passwordError = validatePassword(formData.password)
     if (passwordError) {
-      // Use a temporary error for validation
+      setValidationError(passwordError)
       return
     }
 
+    setIsLoading(true)
+
     try {
-      await signup(formData)
+      // Extract only the fields needed for signup
+      const { name, email, password } = formData
+      await signup({ name, email, password })
+      
+      // Navigate to home after successful signup
       navigate('/')
     } catch (err) {
       // Error is handled by the store
-      console.error('Signup failed:', err)
+      setIsLoading(false)
     }
   }
+
+  const displayError = validationError || error
 
   return (
     <AuthCard
@@ -75,9 +90,9 @@ export default function Signup() {
       subtitle="Join us to manage your invoices efficiently"
     >
       <form onSubmit={handleSubmit} className={classes.form}>
-        {error && (
-          <div className={classes.error}>
-            {error}
+        {displayError && (
+          <div className={classes.error} role="alert">
+            {displayError}
           </div>
         )}
 
@@ -93,7 +108,9 @@ export default function Signup() {
             onChange={handleChange}
             className={classes.input}
             placeholder="Enter your full name"
+            autoComplete="name"
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -109,7 +126,9 @@ export default function Signup() {
             onChange={handleChange}
             className={classes.input}
             placeholder="Enter your email"
+            autoComplete="email"
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -125,7 +144,9 @@ export default function Signup() {
             onChange={handleChange}
             className={classes.input}
             placeholder="Create a strong password"
+            autoComplete="new-password"
             required
+            disabled={isLoading}
           />
           <div className={classes.passwordHint}>
             Password must be at least 8 characters with uppercase, lowercase, and number
@@ -140,11 +161,13 @@ export default function Signup() {
             id="confirmPassword"
             name="confirmPassword"
             type="password"
-            value={confirmPassword}
+            value={formData.confirmPassword}
             onChange={handleChange}
             className={classes.input}
             placeholder="Confirm your password"
+            autoComplete="new-password"
             required
+            disabled={isLoading}
           />
         </div>
 
@@ -153,6 +176,7 @@ export default function Signup() {
             type="submit"
             variant="default"
             overrideStyles={{ width: '100%' }}
+            disabled={isLoading}
           >
             {isLoading ? 'Creating Account...' : 'Create Account'}
           </Button>
@@ -166,6 +190,7 @@ export default function Signup() {
             type="button"
             onClick={() => navigate('/auth/login')}
             className={classes.link}
+            disabled={isLoading}
           >
             Sign in
           </button>

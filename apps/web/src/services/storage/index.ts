@@ -17,6 +17,21 @@ export const StorageService = {
   set(key: string, value: string, saveToSessionStorage = false) {
     return _localstorage.setItem(key, value, saveToSessionStorage)
   },
+  remove(key: string, fromSessionStorage = false) {
+    return _localstorage.removeItem(key, fromSessionStorage)
+  },
+  clear() {
+    _localstorage.setItem('at', '')
+    _localstorage.setItem('rt', '')
+    _localstorage.setItem('user', '')
+    // Clear all invoice app keys
+    const keys = Object.keys(localStorage)
+    keys.forEach(key => {
+      if (key.startsWith('__invoice-app__')) {
+        localStorage.removeItem(key)
+      }
+    })
+  },
 }
 
 const _localstorage = {
@@ -48,6 +63,12 @@ const _localstorage = {
     }
 
     storage.setItem(key, value)
+  },
+  
+  removeItem(key: string, fromSessionStorage = false) {
+    key = generateKey(key)
+    const storage = selectStorage(fromSessionStorage)
+    storage.removeItem(key)
   },
 }
 
