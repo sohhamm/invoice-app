@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router'
 import Button from '@/components/ui/button/Button'
 import { AuthCard } from '@/components/auth'
 import { useAuthActions, useAuthError } from '@/stores/auth'
+import { Toast } from '@/components/ui/toast'
 import type { LoginRequest } from '@/types/auth'
 import classes from '../../../components/auth/auth-card.module.css'
 
@@ -16,6 +17,7 @@ export default function Login() {
     email: '',
     password: ''
   })
+  const [showToast, setShowToast] = useState(true)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -43,7 +45,35 @@ export default function Login() {
     }
   }
 
+  const handleTestLogin = async () => {
+    const testCredentials = {
+      email: 'demo@example.com',
+      password: 'demo123456'
+    }
+    
+    setFormData(testCredentials)
+    setIsLoading(true)
+
+    try {
+      await login(testCredentials)
+      
+      const from = (location.state as any)?.from?.pathname || '/'
+      navigate(from, { replace: true })
+    } catch (err) {
+      setIsLoading(false)
+    }
+  }
+
   return (
+    <>
+      {showToast && (
+        <Toast
+          message="🚀 Try the demo! Click 'Use Test Account' below to explore with sample data. Email: demo@example.com"
+          type="info"
+          duration={0}
+          onClose={() => setShowToast(false)}
+        />
+      )}
     <AuthCard
       title="Welcome Back"
       subtitle="Sign in to your invoice management account"
@@ -100,6 +130,16 @@ export default function Login() {
           >
             {isLoading ? 'Signing In...' : 'Sign In'}
           </Button>
+          
+          <Button
+            type="button"
+            variant="outline"
+            overrideStyles={{ width: '100%', marginTop: '8px' }}
+            disabled={isLoading}
+            onClick={handleTestLogin}
+          >
+            Use Test Account
+          </Button>
         </div>
       </form>
 
@@ -125,5 +165,6 @@ export default function Login() {
         </button>
       </div>
     </AuthCard>
+    </>
   )
 }

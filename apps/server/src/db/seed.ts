@@ -1,5 +1,6 @@
 import { sql } from './index';
 import { Logger } from '@/utils/logger';
+import { PasswordUtils } from '@/utils/password';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -63,20 +64,43 @@ async function seedDatabase() {
     const data = await fs.readFile(dataPath, 'utf-8');
     const mockInvoices: MockInvoice[] = JSON.parse(data);
 
-    // Create a default user for the invoices
-    const userId = '00000000-0000-0000-0000-000000000000';
+    // Create demo users
+    const demoUserId = '00000000-0000-0000-0000-000000000000';
+    const demoPassword = await PasswordUtils.hashPassword('demo123456');
     
-    // Check if user exists, if not create one
-    const [existingUser] = await sql`
-      SELECT id FROM users WHERE id = ${userId}
+    // Check if demo user exists, if not create one, otherwise update
+    const [existingDemoUser] = await sql`
+      SELECT id FROM users WHERE id = ${demoUserId} OR email = 'demo@example.com'
     `;
 
-    if (!existingUser) {
+    if (!existingDemoUser) {
       await sql`
         INSERT INTO users (id, name, email, password_hash, role, is_active)
-        VALUES (${userId}, 'Default User', 'user@example.com', 'hashed_password', 'user', true)
+        VALUES (${demoUserId}, 'Demo User', 'demo@example.com', ${demoPassword}, 'user', true)
       `;
-      Logger.info('Created default user');
+      Logger.info('Created demo user: demo@example.com');
+    } else {
+      // Update existing user with correct credentials
+      await sql`
+        UPDATE users 
+        SET name = 'Demo User', email = 'demo@example.com', password_hash = ${demoPassword}
+        WHERE id = ${demoUserId}
+      `;
+      Logger.info('Updated demo user credentials: demo@example.com');
+    }
+
+    // Also create the default user if needed
+    const [existingDefaultUser] = await sql`
+      SELECT id FROM users WHERE email = 'user@example.com'
+    `;
+
+    if (!existingDefaultUser) {
+      const defaultPassword = await PasswordUtils.hashPassword('password123');
+      await sql`
+        INSERT INTO users (name, email, password_hash, role, is_active)
+        VALUES ('Default User', 'user@example.com', ${defaultPassword}, 'user', true)
+      `;
+      Logger.info('Created default user: user@example.com');
     }
 
     // Clear existing invoice data
@@ -98,7 +122,7 @@ async function seedDatabase() {
           user_id, invoice_number, client_name, client_email, client_address,
           invoice_date, due_date, payment_terms, status, subtotal, total_amount, notes
         ) VALUES (
-          ${userId}, 
+          ${demoUserId}, 
           ${mockInvoice.id}, 
           ${mockInvoice.clientName}, 
           ${mockInvoice.clientEmail}, 
